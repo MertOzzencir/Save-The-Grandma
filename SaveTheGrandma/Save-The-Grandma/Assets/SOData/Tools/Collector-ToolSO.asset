@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 174bfff5a77156144924a57dffef1ad8, type: 3}
+  m_Name: Collector-ToolSO
+  m_EditorClassIdentifier: 
+  TypeOfTool: 3
+  UseCoolDown: 0
+  AttackDamage: 0
+  UseRadius: 6
+  Prefab: {fileID: 1094737403330793510, guid: 65d56e18a9eb05148aa833875ccc21fe, type: 3}
