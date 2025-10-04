@@ -28,6 +28,9 @@ public class MotherSource : MonoBehaviour
         {
             a.ChildMaterialHealth = _sourceSO.MaterialHeath;
             a._sourceMaterial = _sourceSO.SourceDropMaterial;
+            a.ForceDirection = _sourceSO.GetRandomDirection();
+            a.ForcePower = _sourceSO.OnChildDeathForcePower;
+            a.MaterialDropCount = _sourceSO.MaterialDropCount;
             _allChildInfo.Add(a);
         }
     }

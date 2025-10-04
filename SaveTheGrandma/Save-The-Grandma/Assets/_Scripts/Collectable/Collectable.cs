@@ -13,7 +13,6 @@ public class Collectable : MonoBehaviour
     {
         if (toolType == ToolType)
         {
-            Debug.Log("Item Sended To Inventory from " + gameObject.name);
             SendItemToInventory(_toolType.InventoryInformation);
             Destroy(gameObject);
         }

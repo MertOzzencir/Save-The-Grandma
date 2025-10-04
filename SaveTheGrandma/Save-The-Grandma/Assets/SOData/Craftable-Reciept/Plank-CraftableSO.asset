@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Plank-CraftableSO
   m_EditorClassIdentifier: 
   _recipes:
-  - Collectable: {fileID: -1075227148669449564, guid: 2d48cfc8e56a1544787e7326673ed848,
+  - Collectable: {fileID: 6101234494317946951, guid: a77b02c25d6154547accae03400ff031,
       type: 3}
     Amount: 5
   Prefab: {fileID: 155772438679451981, guid: d7a492ca81097884a8772c16f8eb5540, type: 3}

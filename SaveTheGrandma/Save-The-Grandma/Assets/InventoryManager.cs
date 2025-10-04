@@ -25,7 +25,6 @@ public class InventoryManager : MonoBehaviour
 
     private void CollectItem(InventoryInformation inventoryInformation)
     {
-        Debug.Log("Order Recived");
         ItemSlot pickedSlot = null;
         foreach (var a in _slots)
         {

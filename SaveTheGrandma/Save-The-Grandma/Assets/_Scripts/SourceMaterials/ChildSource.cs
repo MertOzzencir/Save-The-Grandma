@@ -11,6 +11,9 @@ public class ChildSource : MonoBehaviour
     
     public Collectable _sourceMaterial{ get; set; }
     public int ChildMaterialHealth{ get; set; }
+    public Vector3 ForceDirection{ get; set; }
+    public float ForcePower{ get; set; }
+    public int MaterialDropCount{ get; set; }
     public int _childIndex { get; private set; }
     void Start()
     {
@@ -28,14 +31,17 @@ public class ChildSource : MonoBehaviour
         cod.enabled = true;
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.isKinematic = false;
-        rb.AddExplosionForce(225f, transform.position,15f,225f, ForceMode.Impulse);
+        rb.AddForce(ForceDirection * ForcePower, ForceMode.Impulse);
         Invoke(nameof(CreateSourceMaterial),1f);
         
     }
 
     private void CreateSourceMaterial() {
+        for (int i = 0; i < MaterialDropCount; i++)
+        {
         Instantiate(_sourceMaterial, transform.position, Quaternion.identity);
-        Destroy(gameObject, 1);
+        }
+        Destroy(gameObject);
     }
 
   

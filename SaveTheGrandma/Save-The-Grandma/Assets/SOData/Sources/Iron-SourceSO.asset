@@ -14,4 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AToolCanDig: 2
   MaterialHeath: 1
+  MaterialDropCount: 1
   SourceDropMaterial: {fileID: 0}
+  OnChildDeathForceDirection: {x: 0, y: 0, z: 0}
+  OnChildDeathForcePower: 0
