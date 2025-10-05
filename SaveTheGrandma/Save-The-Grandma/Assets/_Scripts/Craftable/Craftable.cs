@@ -6,7 +6,10 @@ using UnityEngine;
 public class Craftable : Collectable
 {
     public CraftableSO SOData;
-    
+    public override void Start()
+    {
+        ToolType = SOData.InventoryInformation.ToolCanGather;
+    }
     public override void Collect(ToolType toolType)
     {
         if (toolType == SOData.InventoryInformation.ToolCanGather)

@@ -26,23 +26,32 @@ public class Player : MonoBehaviour
             bench.OpenCraftMenu();
         }
     }
-
     private void PickItem()
     {
         TryToPickItemSlot(out ItemSlot slot);
         if (slot == null)
             return;
+        if (slot.ItemAmount <= 0)
+            return;
 
         if (BenchController.Instance.ActiveBench != null)
         {
+
             Bench activeBench = BenchController.Instance.ActiveBench;
             Craftable activeCraftItem = activeBench.ActiveCraftItem;
             foreach (var a in activeCraftItem.SOData._recipes)
             {
-                if (a.Collectable._collectableData.InventoryInformation.InventoryType == slot.SlotType)
+                if (a.Collectable._collectableData.InventoryInformation.InventoryType == slot.InventoryType)
                 {
-                    Debug.Log("It matched with Reqs");
-                    
+                    activeBench.RecieveItem(slot.InventoryType, a.Collectable, out bool canDecrease);
+                    if (canDecrease)
+                    {
+                        slot.ItemAmount--;
+                        slot.UpdateItemAmount();
+                        if (slot.ItemAmount <= 0)
+                            slot.ResetSlot();
+                    }
+
                 }
             }
 

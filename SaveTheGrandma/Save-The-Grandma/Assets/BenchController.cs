@@ -12,10 +12,7 @@ public class BenchController : MonoBehaviour
     {
         Instance = this;
         AllBenches = FindObjectsByType<Bench>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        foreach (var a in AllBenches)
-        {
-            Debug.Log(a);
-        }
+       
     }
 
     public void SetActiveBench(Bench bench)

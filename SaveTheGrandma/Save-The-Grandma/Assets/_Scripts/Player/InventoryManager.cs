@@ -15,20 +15,35 @@ public class InventoryManager : MonoBehaviour
     {
         Collectable.OnItemCollected += CollectItem;
         InputManager.OnTab += OpenInventory;
+        InputManager.OnClose += OpenInventory;
     }
 
-    private void OpenInventory()
+    public void OpenInventory()
     {
-        _canOpen = !_canOpen;
-        _inventory.SetActive(_canOpen);
+        if (_canOpen)
+        {
+            _canOpen = false;
+            _inventory.SetActive(_canOpen);
+        }
+        else {
+            _canOpen = true;
+            _inventory.SetActive(_canOpen);
+        }
+
     }
+    public void OpenWithBench(bool checkFromBench)
+    {
+        _inventory.SetActive(checkFromBench);
+    }
+
+  
 
     private void CollectItem(InventoryInformation inventoryInformation)
     {
         ItemSlot pickedSlot = null;
         foreach (var a in _slots)
         {
-            if (a.SlotType == inventoryInformation.InventoryType)
+            if (a.InventoryType == inventoryInformation.InventoryType)
             {
                 pickedSlot = a;
             }
@@ -36,18 +51,19 @@ public class InventoryManager : MonoBehaviour
         if (pickedSlot != null)
         {
             pickedSlot.ItemAmount++;
-            pickedSlot.ItemAmountUI.text = pickedSlot.ItemAmount.ToString();
+            pickedSlot.UpdateItemAmount();
         }
         else
         {
             foreach (var a in _slots)
             {
-                if (a.SlotType == InventoryType.Null)
+                if (a.InventoryType == InventoryType.Null)
                 {
                     a.ItemIcon.sprite = inventoryInformation.InventoryIcon;
                     a.ItemAmount++;
-                    a.ItemAmountUI.text = a.ItemAmount.ToString();
-                    a.SlotType = inventoryInformation.InventoryType;
+                    a.UpdateItemAmount();
+                    a.InventoryType = inventoryInformation.InventoryType;
+                    a.MaterialName.text = inventoryInformation.InventoryName;
                     return;
                 }
             }

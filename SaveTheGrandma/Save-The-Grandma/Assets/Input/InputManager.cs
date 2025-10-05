@@ -10,6 +10,7 @@ public class InputManager : MonoBehaviour
     public static event Action<bool> OnUse;
     public static event Action<int> OnToolPick;
     public static event Action OnTab;
+    public static event Action OnClose;
     private InputActions _inputActions;
 
     void Awake()
@@ -51,6 +52,12 @@ public class InputManager : MonoBehaviour
             }
         };
         _inputActions.Player.Inventory.performed += OnInventoryButton;
+        _inputActions.Player.CloseTabs.performed += OnCloseTabs;
+    }
+
+    private void OnCloseTabs(InputAction.CallbackContext context)
+    {
+        OnClose?.Invoke();
     }
 
     private void OnInventoryButton(InputAction.CallbackContext context)

@@ -24,7 +24,6 @@ public class ToolUseManager : MonoBehaviour
         FindObjectsSortMode.None
         );
 
-        Debug.Log(_useableTools[1]);
     }
 
     private void UseTool(bool canUse)

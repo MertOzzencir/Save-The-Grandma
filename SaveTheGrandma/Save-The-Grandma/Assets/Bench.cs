@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,17 +10,24 @@ public class Bench : MonoBehaviour
     [SerializeField] private GameObject _craftMenu;
     [SerializeField] private Image _mainCraftIcon;
     [SerializeField] private TextMeshProUGUI _craftMaterialName;
-    [SerializeField] private TextMeshProUGUI[] _craftMaterialNameText;
+    [SerializeField] private TextMeshProUGUI[] _materialAmountText;
+    [SerializeField] private TextMeshProUGUI[] _materialNameText;
     [SerializeField] private Image[] _materialReq;
     [SerializeField] private Image _outputIcon;
+    [SerializeField] private Transform SpawnPosition;
 
-    public Craftable ActiveCraftItem;
+
+    public Craftable ActiveCraftItem{ get; set; }
 
     private bool _openMenu;
     private int _craftArrayIndex;
+    private Collectable[] _refCollectables = new Collectable[2];
+    private int[] _refAmount = new int[2];
+    private InventoryManager _inventory;
     void Start()
     {
         SetCraftItem(_craftArrayIndex);
+        _inventory = FindAnyObjectByType<InventoryManager>();
     }
     public void OpenCraftMenu()
     {
@@ -28,11 +36,13 @@ public class Bench : MonoBehaviour
         {
             BenchController.Instance.SetActiveBench(this);
             _craftMenu.SetActive(_openMenu);
+            _inventory.OpenWithBench(true);
         }
         else
         {
             BenchController.Instance.ResetActiveBench();
             _craftMenu.SetActive(_openMenu);
+            _inventory.OpenWithBench(false);
         }
 
     }
@@ -46,44 +56,94 @@ public class Bench : MonoBehaviour
     }
     private void SetCraftItemReq(int index)
     {
-        ResetAll();
+        ResetCraftItem();
         if (_allCraftable[index].SOData._recipes.Count == 1)
         {
-            _materialReq[0].sprite = _allCraftable[index].SOData._recipes[0].Collectable._collectableData.InventoryInformation.InventoryIcon;
-            _craftMaterialNameText[0].text = _allCraftable[index].SOData._recipes[0].Amount.ToString();
+            _refCollectables[0] = _allCraftable[index].SOData._recipes[0].Collectable;
+            _materialReq[0].sprite = _refCollectables[0]._collectableData.InventoryInformation.InventoryIcon;
+            _refAmount[0] = _allCraftable[index].SOData._recipes[0].Amount;
+            _materialAmountText[0].text = _refAmount[0].ToString();
+            _materialNameText[0].text = _allCraftable[index].SOData._recipes[0].Collectable._collectableData.InventoryInformation.InventoryName;
         }
         else
         {
-            _materialReq[0].sprite = _allCraftable[index].SOData._recipes[0].Collectable._collectableData.InventoryInformation.InventoryIcon;
-            _craftMaterialNameText[0].text = _allCraftable[index].SOData._recipes[0].Amount.ToString();
-            _materialReq[1].sprite = _allCraftable[index].SOData._recipes[1].Collectable._collectableData.InventoryInformation.InventoryIcon;
-            _craftMaterialNameText[1].text = _allCraftable[index].SOData._recipes[1].Amount.ToString();
+            _refCollectables[0] = _allCraftable[index].SOData._recipes[0].Collectable;
+            _materialReq[0].sprite = _refCollectables[0]._collectableData.InventoryInformation.InventoryIcon;
+            _refAmount[0] = _allCraftable[index].SOData._recipes[0].Amount;
+            _materialAmountText[0].text = _refAmount[0].ToString();
+            _materialNameText[0].text = _allCraftable[index].SOData._recipes[0].Collectable._collectableData.InventoryInformation.InventoryName;
+
+            _refCollectables[1] = _allCraftable[index].SOData._recipes[1].Collectable;
+            _materialReq[1].sprite = _refCollectables[1]._collectableData.InventoryInformation.InventoryIcon;
+            _refAmount[1] = _allCraftable[index].SOData._recipes[1].Amount;
+            _materialAmountText[1].text = _refAmount[1].ToString();
+            _materialNameText[1].text = _allCraftable[index].SOData._recipes[1].Collectable._collectableData.InventoryInformation.InventoryName;
         }
 
+    }
+    public void RecieveItem(InventoryType slotType, Collectable fixedCollectable, out bool materialDecrease)
+    {
+        materialDecrease = false;
+        for (int i = 0; i < _refCollectables.Length; i++)
+        {
+            if (_refCollectables[i] == fixedCollectable)
+            {
+                if (_refAmount[i] > 0)
+                {
+                    _refAmount[i]--;
+                    _materialAmountText[i].text = _refAmount[i].ToString();
+                    materialDecrease = true;
+                    break;
+                }
+                else
+                {
+                    materialDecrease = false;
+                    break;
+                }
+
+            }
+        }
+        if (CanCraft())
+        {
+            Instantiate(ActiveCraftItem.SOData.Prefab, SpawnPosition.position, Quaternion.identity);
+            _outputIcon.sprite = ActiveCraftItem.SOData.InventoryInformation.InventoryIcon;
+        }
+    }
+
+    public bool CanCraft()
+    {
+        if (_refAmount[0] <= 0 && _refAmount[1] <= 0)
+        {
+            SetCraftItem(_craftArrayIndex);
+            return true;
+        }
+        return false;
     }
     public void ChangeCraftSelection(int Amount)
     {
         _craftArrayIndex += Amount;
-        Debug.Log(_craftArrayIndex);
-
+        _outputIcon.sprite = null;
         if (_craftArrayIndex >= _allCraftable.Length)
             _craftArrayIndex = 0;
 
         if (_craftArrayIndex < 0)
             _craftArrayIndex = _allCraftable.Length - 1;
-        Debug.Log("sa");
-        Debug.Log(_craftArrayIndex);
-
 
         SetCraftItem(_craftArrayIndex);
     }
-    private void ResetAll()
+    private void ResetCraftItem()
     {
-
         _materialReq[0].sprite = null;
-        _craftMaterialNameText[0].text = "";
+        _materialAmountText[0].text = "";
         _materialReq[1].sprite = null;
-        _craftMaterialNameText[1].text = "";
+        _materialAmountText[1].text = "";
+        for (int i = 0; i < 2; i++)
+        {
+            _refCollectables[i] = null;
+            _refAmount[i] = 0;
+            _materialAmountText[i].text = "";
+            _materialNameText[i].text = "";
+        }
 
 
 

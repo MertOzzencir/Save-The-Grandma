@@ -10,11 +10,30 @@ public class ItemSlot : MonoBehaviour
     public Image ItemIcon;
     public int ItemAmount;
     public TextMeshProUGUI ItemAmountUI;
-    public InventoryType SlotType;
+    public InventoryType InventoryType;
+    public TextMeshProUGUI MaterialName;
 
+    private Sprite _standartSprite;
+    void Start()
+    {
+        _standartSprite = ItemIcon.sprite;
+    }
     public InventoryType GetSlotType()
     {
-        return SlotType;
+        return InventoryType;
+    }
+    public void UpdateItemAmount()
+    {
+        ItemAmountUI.text = ItemAmount.ToString();
+    }
+
+    public void ResetSlot()
+    {
+        ItemIcon.sprite = _standartSprite;
+        ItemAmount = 0;
+        ItemAmountUI.text = "";
+        InventoryType = InventoryType.Null;
+        MaterialName.text = "";
     }
 }
 
