@@ -47,8 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e988476fdc4776409e274cab0b810b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _toolType: {fileID: 0}
-  _reciept: {fileID: 11400000, guid: 43f3f55370c371749a1286ce1c4ca94a, type: 2}
+  _collectableData: {fileID: 0}
+  SOData: {fileID: 11400000, guid: 43f3f55370c371749a1286ce1c4ca94a, type: 2}
 --- !u!136 &7923078542796330245
 CapsuleCollider:
   m_ObjectHideFlags: 0

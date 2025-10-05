@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &7964797071492714837
+--- !u!1 &1926170977667175329
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,49 +8,46 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8044743460381815329}
-  - component: {fileID: 4770023388608452693}
-  - component: {fileID: 1944984473289504022}
-  - component: {fileID: 486763236493011304}
-  - component: {fileID: 6747201549406684200}
-  - component: {fileID: -1075227148669449564}
-  m_Layer: 7
-  m_Name: Rock-Collectable Prefab
+  - component: {fileID: 7838744094127640085}
+  - component: {fileID: 2036118437016268572}
+  - component: {fileID: 1484272440028106379}
+  m_Layer: 6
+  m_Name: cuboid_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8044743460381815329
+--- !u!4 &7838744094127640085
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7964797071492714837}
+  m_GameObject: {fileID: 1926170977667175329}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 7.355452, y: 7.355452, z: 7.355452}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 8044743460381815329}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &4770023388608452693
+--- !u!33 &2036118437016268572
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7964797071492714837}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &1944984473289504022
+  m_GameObject: {fileID: 1926170977667175329}
+  m_Mesh: {fileID: 2372899754226953640, guid: 2eec8e43c8e54624193077cd7e77d189, type: 3}
+--- !u!23 &1484272440028106379
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7964797071492714837}
+  m_GameObject: {fileID: 1926170977667175329}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -64,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 669d5d3d4a14940448a89e99521a27f8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -86,6 +83,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &7964797071492714837
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8044743460381815329}
+  - component: {fileID: 486763236493011304}
+  - component: {fileID: 6747201549406684200}
+  - component: {fileID: -1075227148669449564}
+  m_Layer: 7
+  m_Name: Rock-Collectable Prefab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8044743460381815329
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7964797071492714837}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
+  m_ConstrainProportionsScale: 1
+  m_Children:
+  - {fileID: 7838744094127640085}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &486763236493011304
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -105,8 +137,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 2.4114091, y: 2.2822075, z: 2.2725515}
+  m_Center: {x: -0.014622331, y: 0.00046634674, z: -0.015639067}
 --- !u!54 &6747201549406684200
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -146,7 +178,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b770ff2df6c3d7c49bca872097ed9feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _groundMask:
-    serializedVersion: 2
-    m_Bits: 512
-  _toolType: {fileID: 11400000, guid: 8f5ad019d30d3754e9a8b0f3cb788d37, type: 2}
+  _collectableData: {fileID: 11400000, guid: 8f5ad019d30d3754e9a8b0f3cb788d37, type: 2}

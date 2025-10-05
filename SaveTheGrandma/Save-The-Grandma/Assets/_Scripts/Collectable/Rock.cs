@@ -5,8 +5,5 @@ using UnityEngine;
 
 public class Rock : Collectable
 {
-    void Start()
-    {
-        ToolType = _toolType.InventoryInformation.ToolCanGather;
-    }
+   
 }

@@ -5,16 +5,13 @@ using UnityEngine;
 
 public class Craftable : Collectable
 {
-    [SerializeField] private CraftableSO _reciept;
-     void Start()
-    {
-        ToolType = _reciept.InventoryInformation.ToolCanGather;
-    }
+    public CraftableSO SOData;
+    
     public override void Collect(ToolType toolType)
     {
-        if (toolType == _reciept.InventoryInformation.ToolCanGather)
+        if (toolType == SOData.InventoryInformation.ToolCanGather)
         {
-            SendItemToInventory(_reciept.InventoryInformation);
+            SendItemToInventory(SOData.InventoryInformation);
             Destroy(gameObject);
         }
     }

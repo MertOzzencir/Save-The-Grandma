@@ -28,5 +28,6 @@ public class InventoryInformation
     public InventoryType InventoryType;
     public Sprite InventoryIcon;
     public ToolType ToolCanGather;
+    public string InventoryName;
 
 }

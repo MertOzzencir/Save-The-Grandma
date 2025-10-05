@@ -55,11 +55,3 @@ public class InventoryManager : MonoBehaviour
     }
 }
 
-[Serializable]
-public class ItemSlot
-{
-    public Image ItemIcon;
-    public int ItemAmount;
-    public TextMeshProUGUI ItemAmountUI;
-    public InventoryType SlotType; 
-}

@@ -6,9 +6,10 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private MotherSource _materialControllerToSpawn;
+    [SerializeField] private MotherSource _materialControllerToSpawnPrefab;
     [SerializeField] private float _spawnFreq;
     [SerializeField] private Transform[] _spawnPoints;
+    [SerializeField] private Vector3 _objSpawnRotation;
 
     public Dictionary<Transform, SpawnSpec> _spawnAvaliableArray = new Dictionary<Transform, SpawnSpec>();
     public float _spawnTimer { get; set; }
@@ -37,7 +38,7 @@ public class Spawner : MonoBehaviour
 
     private void Spawn(Transform a)
     {
-        MotherSource refs = Instantiate(_materialControllerToSpawn, a.position, Quaternion.identity);
+        MotherSource refs = Instantiate(_materialControllerToSpawnPrefab, a.position, Quaternion.Euler(_objSpawnRotation));
         refs.transform.parent = a.transform;
         refs.SetSpawnerObject(this);
     }

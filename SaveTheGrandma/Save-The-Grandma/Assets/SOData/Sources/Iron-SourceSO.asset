@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Iron-SourceSO
   m_EditorClassIdentifier: 
   AToolCanDig: 2
-  MaterialHeath: 1
+  MaterialHeath: 3
   MaterialDropCount: 1
-  SourceDropMaterial: {fileID: 0}
-  OnChildDeathForceDirection: {x: 0, y: 0, z: 0}
-  OnChildDeathForcePower: 0
+  SourceDropMaterial: {fileID: 6659128302832555500, guid: 72c39753a909fff4d8d366e35b3ae589,
+    type: 3}
+  OnChildDeathForceDirection: {x: 1, y: 1, z: 0.5}
+  OnChildDeathForcePower: 9

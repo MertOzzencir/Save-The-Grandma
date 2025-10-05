@@ -17,5 +17,5 @@ MonoBehaviour:
   MaterialDropCount: 1
   SourceDropMaterial: {fileID: 6101234494317946951, guid: a77b02c25d6154547accae03400ff031,
     type: 3}
-  OnChildDeathForceDirection: {x: -1, y: 1, z: 0.5}
+  OnChildDeathForceDirection: {x: -1, y: 1, z: 0}
   OnChildDeathForcePower: 200
