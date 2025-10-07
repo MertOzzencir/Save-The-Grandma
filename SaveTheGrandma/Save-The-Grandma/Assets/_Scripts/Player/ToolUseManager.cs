@@ -37,14 +37,21 @@ public class ToolUseManager : MonoBehaviour
         if (_pickedObject == null)
             return;
 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, _groundMask))
-        {
-            _pickedObject.transform.position = Vector3.Lerp(_pickedObject.transform.position, hit.point + _moveOffSet, .25f);
-        }
         if (_canUse)
-            _pickedObject.Use();
+        {
+            _pickedObject.StartUse();
+            return;
+        }
+        else
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, _groundMask))
+            {
+                _pickedObject.transform.position = Vector3.Lerp(_pickedObject.transform.position, hit.point + _moveOffSet, .25f);
+            }
+        }
+
 
     }
 

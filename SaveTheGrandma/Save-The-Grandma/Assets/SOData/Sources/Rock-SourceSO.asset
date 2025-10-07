@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Rock-SourceSO
   m_EditorClassIdentifier: 
   AToolCanDig: 2
-  MaterialHeath: 3
+  MaterialHeath: 1
   MaterialDropCount: 1
   SourceDropMaterial: {fileID: -1075227148669449564, guid: 2d48cfc8e56a1544787e7326673ed848,
     type: 3}
   OnChildDeathForceDirection: {x: 1, y: 1, z: 0}
   OnChildDeathForcePower: 6
+  SpawnTimer: 2

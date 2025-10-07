@@ -1,14 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class ChildSource : MonoBehaviour
 {
-    [SerializeField] private GameObject GroundShadow;
     public Collectable _sourceMaterial { get; set; }
     public int ChildMaterialHealth { get; set; }
     public Vector3 ForceDirection { get; set; }
@@ -18,6 +15,7 @@ public class ChildSource : MonoBehaviour
     void Start()
     {
         _childIndex = transform.GetSiblingIndex();
+            
     }
 
     public int GetHealth()
@@ -33,16 +31,12 @@ public class ChildSource : MonoBehaviour
 
     public void HandleDeath()
     {
-        if(GroundShadow != null)
-            GroundShadow.SetActive(false);
-
         Collider cod = GetComponent<Collider>();
         cod.enabled = true;
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.isKinematic = false;
         rb.AddForce(ForceDirection * ForcePower, ForceMode.Impulse);
         Invoke(nameof(CreateSourceMaterial), 1f);
-
     }
 
     private void CreateSourceMaterial()

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Axe-ToolSO
   m_EditorClassIdentifier: 
   TypeOfTool: 1
-  UseCoolDown: 0
-  AttackDamage: 1
-  UseRadius: 2
-  Prefab: {fileID: 5349593968869698139, guid: e62bc6f27c985f8489d7755595a6c89b, type: 3}
+  SpeedMultiplier: 5
+  AttackDamage: 3
+  UseRadius: 4
+  Prefab: {fileID: 2291649329040844947, guid: ec418a83e4459f14982aa3c75ff83448, type: 3}

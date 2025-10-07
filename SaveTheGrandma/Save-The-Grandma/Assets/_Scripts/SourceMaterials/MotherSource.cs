@@ -7,7 +7,9 @@ using UnityEngine;
 public class MotherSource : MonoBehaviour
 {
 
-    [SerializeField] private SourceSO _sourceSO;
+    public SourceSO _sourceSO;
+    [SerializeField] private GameObject _groundShadow;
+    public Transform DigPosition;
     private ChildSource[] _childMaterials;
     private List<ChildSource> _allChildInfo = new List<ChildSource>();
     private int _totalChild;
@@ -18,6 +20,7 @@ public class MotherSource : MonoBehaviour
         _childMaterials = GetComponentsInChildren<ChildSource>();
         _totalChild = transform.childCount;
         GetChildrenInfo(_childMaterials);
+        _groundShadow.transform.parent = null;
     }
 
     public void GetChildrenInfo(ChildSource[] childTransform)
@@ -33,9 +36,9 @@ public class MotherSource : MonoBehaviour
         }
     }
 
-    public void Dig(int attackDamage, ToolType _recievedToolType)
+    public void Dig(int attackDamage, ToolType _recievedToolType,out bool isDead)
     {
-        
+        isDead = false;
         if (_indexOfChildCount > _totalChild - 1)
                 return;
 
@@ -46,11 +49,12 @@ public class MotherSource : MonoBehaviour
         if (refChild != null)
         {
             refChild.OnDig(attackDamage);
-            
+
             if (refChild.GetHealth() <= 0)
             {
                 _allChildInfo.Remove(refChild);
                 HandleChildDeath(refChild);
+                HandleChildCount(out isDead);
             }
         }
 
@@ -61,16 +65,22 @@ public class MotherSource : MonoBehaviour
     {
         _indexOfChildCount++;
         a.HandleDeath();
-        HandleChildCount();
     }
 
-    private void HandleChildCount()
+    private void HandleChildCount(out bool isDead)
     {
-        if (_allChildInfo.Count <= 0)
+        isDead = false;
+        if (_indexOfChildCount >= _totalChild)
         {
+            isDead = true;
+            _groundShadow.SetActive(false);
+            _groundShadow.transform.parent = this.transform;
+            DigPosition.parent = null;
+            Destroy(DigPosition.gameObject, 2f);
             _ownSpawnObject._spawnAvaliableArray[transform.parent].Avaliable = true;
             _ownSpawnObject._spawnTimer = 0;
-            Destroy(gameObject, 1);
+            Destroy(this);
+            Destroy(gameObject, 1f);
         }
     }
     public void SetSpawnerObject(Spawner obj)

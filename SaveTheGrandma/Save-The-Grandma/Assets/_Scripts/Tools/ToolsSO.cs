@@ -5,7 +5,7 @@ using UnityEngine;
 public class ToolsSO : ScriptableObject
 {
     public ToolType TypeOfTool;
-    public float UseCoolDown;
+    public float SpeedMultiplier;
     public int AttackDamage;
     public float UseRadius;
     public Tools Prefab;

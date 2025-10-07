@@ -9,14 +9,21 @@ public class Craftable : Collectable
     public override void Start()
     {
         ToolType = SOData.InventoryInformation.ToolCanGather;
+        SetIdleAnimation();
     }
     public override void Collect(ToolType toolType)
     {
-        if (toolType == SOData.InventoryInformation.ToolCanGather)
+        if (toolType == SOData.InventoryInformation.ToolCanGather && !_collected)
         {
+            _collected = true;
             SendItemToInventory(SOData.InventoryInformation);
-            Destroy(gameObject);
+            StartCoroutine(CollectAnimation()); 
+            Destroy(gameObject,1f);
         }
+    }
+    public override void Update()
+    {
+        base.Update();
     }
 }
 [Serializable]

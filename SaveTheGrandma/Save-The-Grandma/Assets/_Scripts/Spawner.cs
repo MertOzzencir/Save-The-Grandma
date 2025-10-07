@@ -7,14 +7,15 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     [SerializeField] private MotherSource _materialControllerToSpawnPrefab;
-    [SerializeField] private float _spawnFreq;
     [SerializeField] private Transform[] _spawnPoints;
     [SerializeField] private Vector3 _objSpawnRotation;
 
     public Dictionary<Transform, SpawnSpec> _spawnAvaliableArray = new Dictionary<Transform, SpawnSpec>();
     public float _spawnTimer { get; set; }
+    private float _spawnFreq;
     void Awake()
     {
+        _spawnFreq = _materialControllerToSpawnPrefab._sourceSO.SpawnTimer;
         foreach (var a in _spawnPoints)
         {
             _spawnAvaliableArray.Add(a, new SpawnSpec(true, 0));

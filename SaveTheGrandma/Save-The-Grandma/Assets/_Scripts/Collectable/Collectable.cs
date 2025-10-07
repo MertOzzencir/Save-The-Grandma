@@ -1,6 +1,7 @@
 
 
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class Collectable : MonoBehaviour
@@ -13,19 +14,28 @@ public class Collectable : MonoBehaviour
     private Vector3 _targetPosition;
     private float sinX;
     private float up;
+    public bool _collected;
     public virtual void Start()
     {
         ToolType = _collectableData.InventoryInformation.ToolCanGather;
+        SetIdleAnimation();
+    }
+
+    public void SetIdleAnimation()
+    {
         float randomRotation = UnityEngine.Random.Range(0f, 180f);
         transform.Rotate(0, randomRotation, 0);
-        Invoke(nameof(OnStartAnimation), 1f);
+        Invoke(nameof(IdleAnimation), 1f);
     }
+
     public virtual void Collect(ToolType toolType)
     {
-        if (toolType == ToolType)
+        if (toolType == ToolType && !_collected)
         {
+            _collected = true;
             SendItemToInventory(_collectableData.InventoryInformation);
-            Destroy(gameObject);
+            StartCoroutine(CollectAnimation());
+            Destroy(gameObject,1f);
         }
     }
     public virtual void Update()
@@ -48,13 +58,23 @@ public class Collectable : MonoBehaviour
         OnItemCollected?.Invoke(a);
     }
 
-    private void OnStartAnimation()
+    private void IdleAnimation()
     {
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.isKinematic = true;
         _canTurn = true;
         _targetPosition = transform.position + new Vector3(0, 2.5f, 0);
         transform.up = Vector3.up;
+    }
+
+    public IEnumerator CollectAnimation()
+    {
+        while (true)
+        {
+            transform.position += Vector3.up * Time.deltaTime * 20f;
+            transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 1.5f * Time.deltaTime); 
+            yield return null;
+        }
     }
 
 }

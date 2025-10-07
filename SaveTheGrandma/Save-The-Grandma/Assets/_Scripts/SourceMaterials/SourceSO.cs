@@ -11,6 +11,7 @@ public class SourceSO : ScriptableObject
     public Collectable SourceDropMaterial;
     public Vector3 OnChildDeathForceDirection;
     public float OnChildDeathForcePower;
+    public float SpawnTimer;
 
     public Vector3 GetRandomDirection()
     {

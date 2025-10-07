@@ -4,20 +4,21 @@ using UnityEngine;
 public abstract class Tools : MonoBehaviour
 {
     public ToolsSO ToolData;
+    public LayerMask SourceLayer;
     public Rigidbody RB;
-    public float _lastTimeUsed { get; set; }
     public Collider[] ObjectToCheck { get; set; }
-    public virtual void Use()
+    public MotherSource _activeSource { get; set; }
+
+    public bool isOverload{ get; set; }
+    public virtual void StartUse()
     {
-        ObjectToCheck = Physics.OverlapSphere(transform.position, ToolData.UseRadius);
+        if (!isOverload)
+        {
+            ObjectToCheck = Physics.OverlapSphere(transform.position, ToolData.UseRadius,SourceLayer);
+            Debug.Log("Find Object");
+        }
     }
-    public bool CooldownTimer()
-    {
-        if (Time.time < ToolData.UseCoolDown + _lastTimeUsed)
-            return false;
-        else
-            return true;
-    }
+    
     public virtual void Picked()
     {
         RB.isKinematic = true;
@@ -26,7 +27,7 @@ public abstract class Tools : MonoBehaviour
     {
         RB.isKinematic = false;
     }
-     void OnDrawGizmos()
+    void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position, ToolData.UseRadius);
     }

@@ -60,6 +60,7 @@ public class InventoryManager : MonoBehaviour
                 if (a.InventoryType == InventoryType.Null)
                 {
                     a.ItemIcon.sprite = inventoryInformation.InventoryIcon;
+                    a.ItemIcon.color = new Color(255, 255, 255, 1);
                     a.ItemAmount++;
                     a.UpdateItemAmount();
                     a.InventoryType = inventoryInformation.InventoryType;

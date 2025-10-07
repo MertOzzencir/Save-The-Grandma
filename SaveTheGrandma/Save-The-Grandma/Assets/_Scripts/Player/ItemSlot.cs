@@ -13,11 +13,7 @@ public class ItemSlot : MonoBehaviour
     public InventoryType InventoryType;
     public TextMeshProUGUI MaterialName;
 
-    private Sprite _standartSprite;
-    void Start()
-    {
-        _standartSprite = ItemIcon.sprite;
-    }
+   
     public InventoryType GetSlotType()
     {
         return InventoryType;
@@ -29,7 +25,8 @@ public class ItemSlot : MonoBehaviour
 
     public void ResetSlot()
     {
-        ItemIcon.sprite = _standartSprite;
+        ItemIcon.sprite = null;
+        ItemIcon.color = new Color(255, 255, 255, .1f);
         ItemAmount = 0;
         ItemAmountUI.text = "";
         InventoryType = InventoryType.Null;
