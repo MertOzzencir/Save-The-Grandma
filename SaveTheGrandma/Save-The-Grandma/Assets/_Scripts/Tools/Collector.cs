@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,16 +8,24 @@ public class Collector : Tools
     [SerializeField] private LayerMask _groundMask;
     [SerializeField] private Vector3 _moveOffSet;
     private bool _canUpdateMovement;
+    private Animator _anim;
+    void Start()
+    {
+        _anim = GetComponentInChildren<Animator>();
+    }
     public override void StartUse()
     {
         _canUpdateMovement = true;
         base.StartUse();
+        Debug.Log("Trying to Collect");
         foreach (var a in ObjectToCheck)
         {
             Collectable source = a.transform.GetComponent<Collectable>();
             if (source != null)
             {
+                _anim.SetBool("canCollect", true);
                 source.Collect(ToolData.TypeOfTool);
+                Debug.Log("Collected");
             }
         }
     }
@@ -35,6 +44,21 @@ public class Collector : Tools
     {
         base.UnPicked();
         _canUpdateMovement = false;
+    }
+    private void ToolCanceled(bool obj)
+    {
+        if (!obj)
+            _anim.SetBool("canCollect", false);
+    }
+    void OnEnable()
+    {
+        InputManager.OnUse += ToolCanceled;
+    }
+
+
+    void OnDisable()
+    {
+        InputManager.OnUse -= ToolCanceled;
     }
 
 

@@ -29,7 +29,6 @@ public class Axe : Tools
                 continue;
             if (a.TryGetComponent(out MotherSource source))
             {
-                Debug.Log("sA?");
                 _activeSource = source;
                 _anim.SetBool("useTool", true);
                 transform.position = _activeSource.DigPosition.position;
@@ -62,7 +61,6 @@ public class Axe : Tools
     }
     private void ToolCanceled(bool obj)
     {
-        Debug.Log("Cancel?");
         if (!obj)
         {
             _anim.SetBool("useTool", false);

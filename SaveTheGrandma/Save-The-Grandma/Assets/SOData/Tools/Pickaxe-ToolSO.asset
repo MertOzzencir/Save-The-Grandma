@@ -15,5 +15,5 @@ MonoBehaviour:
   TypeOfTool: 2
   SpeedMultiplier: 3
   AttackDamage: 1
-  UseRadius: 4
+  UseRadius: 5
   Prefab: {fileID: 2568382768265222412, guid: ab9289da61bd2584aa21191909d4c956, type: 3}

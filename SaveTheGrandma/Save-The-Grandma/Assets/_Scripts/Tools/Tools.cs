@@ -15,7 +15,6 @@ public abstract class Tools : MonoBehaviour
         if (!isOverload)
         {
             ObjectToCheck = Physics.OverlapSphere(transform.position, ToolData.UseRadius,SourceLayer);
-            Debug.Log("Find Object");
         }
     }
     

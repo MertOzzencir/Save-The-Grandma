@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Collector-ToolSO
   m_EditorClassIdentifier: 
   TypeOfTool: 3
-  UseCoolDown: 0
+  SpeedMultiplier: 0
   AttackDamage: 0
-  UseRadius: 7
-  Prefab: {fileID: 1094737403330793510, guid: 65d56e18a9eb05148aa833875ccc21fe, type: 3}
+  UseRadius: 12.61
+  Prefab: {fileID: 2387389018864163651, guid: 65d56e18a9eb05148aa833875ccc21fe, type: 3}

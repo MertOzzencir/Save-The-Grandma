@@ -48,14 +48,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e55a53ebb201c444f871a879a8c50573, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _materialControllerToSpawn: {fileID: 0}
-  _spawnFreq: 2
+  _materialControllerToSpawnPrefab: {fileID: 0}
   _spawnPoints:
   - {fileID: 320487348526076655}
   - {fileID: 6578822163277937226}
   - {fileID: 3645513881038470205}
   - {fileID: 429209504587604754}
-  _spawnTimer: 0
+  _objSpawnRotation: {x: 0, y: 0, z: 0}
 --- !u!1 &5749850710307163584
 GameObject:
   m_ObjectHideFlags: 0
