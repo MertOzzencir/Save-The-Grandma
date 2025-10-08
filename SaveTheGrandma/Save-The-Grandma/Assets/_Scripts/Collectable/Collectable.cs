@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class Collectable : MonoBehaviour
 {
-    public static event Action<InventoryInformation> OnItemCollected;
     public CollectableSO _collectableData;
     public ToolType ToolType { get; set; }
 
@@ -33,7 +32,7 @@ public class Collectable : MonoBehaviour
         if (toolType == ToolType && !_collected)
         {
             _collected = true;
-            SendItemToInventory(_collectableData.InventoryInformation);
+            InventoryManager.Instance.CollectItem(_collectableData.InventoryInformation);
             StartCoroutine(CollectAnimation());
             Destroy(gameObject,1f);
         }
@@ -52,12 +51,6 @@ public class Collectable : MonoBehaviour
 
 
     }
-
-    public void SendItemToInventory(InventoryInformation a)
-    {
-        OnItemCollected?.Invoke(a);
-    }
-
     private void IdleAnimation()
     {
         Rigidbody rb = GetComponent<Rigidbody>();

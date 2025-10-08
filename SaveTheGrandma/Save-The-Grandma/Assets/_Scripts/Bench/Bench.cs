@@ -17,7 +17,7 @@ public class Bench : MonoBehaviour
     [SerializeField] private Transform SpawnPosition;
 
 
-    public Craftable ActiveCraftItem{ get; set; }
+    public Craftable ActiveCraftItem { get; set; }
 
     private bool _openMenu;
     private int _craftArrayIndex;
@@ -100,14 +100,9 @@ public class Bench : MonoBehaviour
                     materialDecrease = false;
                     break;
                 }
-
             }
         }
-        if (CanCraft())
-        {
-            Instantiate(ActiveCraftItem.SOData.Prefab, SpawnPosition.position, Quaternion.identity);
-            _outputIcon.sprite = ActiveCraftItem.SOData.InventoryInformation.InventoryIcon;
-        }
+
     }
 
     public bool CanCraft()
@@ -118,6 +113,14 @@ public class Bench : MonoBehaviour
             return true;
         }
         return false;
+    }
+    public void Create()
+    {
+        if (CanCraft())
+        {
+            InventoryManager.Instance.CollectItem(ActiveCraftItem.SOData.InventoryInformation);
+            _outputIcon.sprite = ActiveCraftItem.SOData.InventoryInformation.InventoryIcon;
+        }
     }
     public void ChangeCraftSelection(int Amount)
     {
@@ -133,20 +136,15 @@ public class Bench : MonoBehaviour
     }
     private void ResetCraftItem()
     {
-        _materialReq[0].sprite = null;
-        _materialAmountText[0].text = "";
-        _materialReq[1].sprite = null;
-        _materialAmountText[1].text = "";
         for (int i = 0; i < 2; i++)
         {
+            _materialReq[i].sprite = null;
+            _materialAmountText[i].text = "";
             _refCollectables[i] = null;
             _refAmount[i] = 0;
             _materialAmountText[i].text = "";
             _materialNameText[i].text = "";
         }
-
-
-
     }
 }
 

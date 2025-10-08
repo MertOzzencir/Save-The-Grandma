@@ -7,13 +7,14 @@ using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
+    public static InventoryManager Instance;
     [SerializeField] private ItemSlot[] _slots;
     [SerializeField] private GameObject _inventory;
 
     private bool _canOpen;
     void Start()
     {
-        Collectable.OnItemCollected += CollectItem;
+        Instance = this;
         InputManager.OnTab += OpenInventory;
         InputManager.OnClose += OpenInventory;
     }
@@ -38,7 +39,7 @@ public class InventoryManager : MonoBehaviour
 
   
 
-    private void CollectItem(InventoryInformation inventoryInformation)
+    public void CollectItem(InventoryInformation inventoryInformation)
     {
         ItemSlot pickedSlot = null;
         foreach (var a in _slots)

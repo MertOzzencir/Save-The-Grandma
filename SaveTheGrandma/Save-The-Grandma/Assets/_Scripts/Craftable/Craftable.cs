@@ -16,7 +16,7 @@ public class Craftable : Collectable
         if (toolType == SOData.InventoryInformation.ToolCanGather && !_collected)
         {
             _collected = true;
-            SendItemToInventory(SOData.InventoryInformation);
+            InventoryManager.Instance.CollectItem(SOData.InventoryInformation);
             StartCoroutine(CollectAnimation()); 
             Destroy(gameObject,1f);
         }

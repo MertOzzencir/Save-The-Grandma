@@ -19,6 +19,7 @@ public class Axe : Tools
     }
     public override void StartUse()
     {
+        _anim.SetBool("hardUseTool", false);
         if (_activeSource != null)
             return;
         base.StartUse();
@@ -63,6 +64,7 @@ public class Axe : Tools
     {
         if (!obj)
         {
+            _anim.SetBool("hardUseTool", true);
             _anim.SetBool("useTool", false);
             _activeSource = null;
             isOverload = false;

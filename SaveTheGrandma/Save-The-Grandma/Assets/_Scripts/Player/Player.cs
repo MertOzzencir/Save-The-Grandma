@@ -49,9 +49,11 @@ public class Player : MonoBehaviour
                         slot.ItemAmount--;
                         slot.UpdateItemAmount();
                         if (slot.ItemAmount <= 0)
+                        {
                             slot.ResetSlot();
+                        }
+                        activeBench.Create();
                     }
-
                 }
             }
 
