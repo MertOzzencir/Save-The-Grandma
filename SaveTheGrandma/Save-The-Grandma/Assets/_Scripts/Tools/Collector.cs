@@ -9,12 +9,14 @@ public class Collector : Tools
     [SerializeField] private Vector3 _moveOffSet;
     private bool _canUpdateMovement;
     private Animator _anim;
+    private bool _canAnim;
     void Start()
     {
         _anim = GetComponentInChildren<Animator>();
     }
     public override void StartUse()
     {
+        _canAnim = false;
         _canUpdateMovement = true;
         base.StartUse();
         Debug.Log("Trying to Collect");
@@ -23,11 +25,15 @@ public class Collector : Tools
             Collectable source = a.transform.GetComponent<Collectable>();
             if (source != null)
             {
-                _anim.SetBool("canCollect", true);
                 source.Collect(ToolData.TypeOfTool);
-                Debug.Log("Collected");
+                _canAnim = true;
             }
         }
+        if (_canAnim)
+            _anim.SetBool("canCollect", true);
+        else
+            _anim.SetBool("canCollect", false);
+
     }
     void Update()
     {

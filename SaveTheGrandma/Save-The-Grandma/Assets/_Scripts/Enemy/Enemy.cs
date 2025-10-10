@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting.InputSystem;
-using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
