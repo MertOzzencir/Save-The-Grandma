@@ -13,9 +13,9 @@ public class Craftable : Collectable
     }
     public override void Collect(ToolType toolType)
     {
-        if (toolType == SOData.InventoryInformation.ToolCanGather && !_collected)
+        if (toolType == SOData.InventoryInformation.ToolCanGather && !Collected)
         {
-            _collected = true;
+            Collected = true;
             InventoryManager.Instance.CollectItem(SOData.InventoryInformation);
             StartCoroutine(CollectAnimation()); 
             Destroy(gameObject,1f);

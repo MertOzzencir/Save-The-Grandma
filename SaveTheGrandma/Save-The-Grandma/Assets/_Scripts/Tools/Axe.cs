@@ -11,6 +11,7 @@ public class Axe : Tools
 
     private AnimationEventHandler _animEventHandler;
     private Animator _anim;
+    private bool _isCanceled;
     void Awake()
     {
         _animEventHandler = GetComponentInChildren<AnimationEventHandler>();
@@ -50,6 +51,7 @@ public class Axe : Tools
             {
                 _activeSource = null;
                 _anim.SetBool("useTool", false);
+                _anim.SetBool("hardUseTool", false);
                 Invoke(nameof(Tampon), timer + 0.1f);
                 isOverload = false;
             }
@@ -58,17 +60,21 @@ public class Axe : Tools
     private void Tampon()
     {
         isOverload = false;
-        StartUse();
+        if(!_isCanceled)
+            StartUse();
     }
     private void ToolCanceled(bool obj)
     {
         if (!obj)
         {
-            _anim.SetBool("hardUseTool", true);
             _anim.SetBool("useTool", false);
+            _anim.SetBool("hardUseTool", true);
             _activeSource = null;
             isOverload = false;
+            _isCanceled = true;
         }
+        else
+            _isCanceled = false;
     }
 
 

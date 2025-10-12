@@ -15,10 +15,15 @@ public class Bench : MonoBehaviour
     [SerializeField] private Image[] _materialReq;
     [SerializeField] private Image _outputIcon;
     [SerializeField] private Transform SpawnPosition;
+    [SerializeField] private float _craftTimer;
+    [SerializeField] private Slider _craftUISlider;
 
 
     public Craftable ActiveCraftItem { get; set; }
 
+    private Animator _anim;
+    private bool _duringCraft;
+    private float _uiCraftTimer;
     private bool _openMenu;
     private int _craftArrayIndex;
     private Collectable[] _refCollectables = new Collectable[2];
@@ -28,18 +33,21 @@ public class Bench : MonoBehaviour
     {
         SetCraftItem(_craftArrayIndex);
         _inventory = FindAnyObjectByType<InventoryManager>();
+        _anim = GetComponentInChildren<Animator>();
     }
     public void OpenCraftMenu()
     {
         _openMenu = !_openMenu;
         if (_openMenu)
         {
+            _anim.SetBool("isOpen",true);
             BenchController.Instance.SetActiveBench(this);
             _craftMenu.SetActive(_openMenu);
             _inventory.OpenWithBench(true);
         }
         else
         {
+            _anim.SetBool("isOpen",false);
             BenchController.Instance.ResetActiveBench();
             _craftMenu.SetActive(_openMenu);
             _inventory.OpenWithBench(false);
@@ -83,6 +91,11 @@ public class Bench : MonoBehaviour
     }
     public void RecieveItem(InventoryType slotType, Collectable fixedCollectable, out bool materialDecrease)
     {
+        if (_duringCraft)
+        {
+            materialDecrease = false;
+            return;
+        }
         materialDecrease = false;
         for (int i = 0; i < _refCollectables.Length; i++)
         {
@@ -118,12 +131,33 @@ public class Bench : MonoBehaviour
     {
         if (CanCraft())
         {
-            InventoryManager.Instance.CollectItem(ActiveCraftItem.SOData.InventoryInformation);
-            _outputIcon.sprite = ActiveCraftItem.SOData.InventoryInformation.InventoryIcon;
+            StartCoroutine(CreateCoolDown());
         }
+    }
+    IEnumerator CreateCoolDown()
+    {
+        _anim.SetBool("canCraft", true);
+        _craftUISlider.gameObject.SetActive(true);
+        _duringCraft = true;
+        _uiCraftTimer = 0;
+        while (_uiCraftTimer <= _craftTimer)
+        {
+            _uiCraftTimer += Time.deltaTime;
+            _craftUISlider.value = _uiCraftTimer;
+            yield return null;
+        }
+        InventoryManager.Instance.CollectItem(ActiveCraftItem.SOData.InventoryInformation);
+        _outputIcon.sprite = ActiveCraftItem.SOData.InventoryInformation.InventoryIcon;
+        _craftUISlider.value = 0;
+        _duringCraft = false;
+        _craftUISlider.gameObject.SetActive(false);
+        _anim.SetBool("canCraft", false);
+
     }
     public void ChangeCraftSelection(int Amount)
     {
+        if (_duringCraft)
+            return;
         _craftArrayIndex += Amount;
         _outputIcon.sprite = null;
         if (_craftArrayIndex >= _allCraftable.Length)

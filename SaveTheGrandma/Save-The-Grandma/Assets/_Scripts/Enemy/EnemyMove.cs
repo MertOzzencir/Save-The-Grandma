@@ -20,15 +20,12 @@ public class EnemyMove : EnemyState
     }
     public override void Update()
     {
-        if (Vector3.Distance(Enemy.transform.position, Enemy._waypoints[Enemy._waypointIndex].position) < 2f)
-        {
-            StateMachine.ChangeState(Enemy.EnemyIdleState);
-        }
+        Enemy.MoveDistanceCheck(Enemy._waypoints[Enemy._waypointIndex].position, Enemy.EnemyPatrol,2f);
     }
     public override void FixedUpdate()
     {
         Enemy.Move(_moveDirection);
-        Enemy.LookRotationToTarget();
+        Enemy.LookRotationToTarget(_moveDirection);
 
 
     }

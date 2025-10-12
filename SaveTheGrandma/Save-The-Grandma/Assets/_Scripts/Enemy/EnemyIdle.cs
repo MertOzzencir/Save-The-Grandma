@@ -22,6 +22,6 @@ public class EnemyIdle : EnemyState
         tempTimer += Time.deltaTime;
         
         if (tempTimer > Enemy.IdleTimer)
-            StateMachine.ChangeState(Enemy.EnemyMoveState);
+            StateMachine.ChangeState(Enemy.EnemyMove);
     }
 }

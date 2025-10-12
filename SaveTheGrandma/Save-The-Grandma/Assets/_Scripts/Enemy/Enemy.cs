@@ -10,8 +10,16 @@ public class Enemy : MonoBehaviour
 
     [Header("State Settings")]
     public float IdleTimer;
-    public EnemyIdle EnemyIdleState { get; set; }
-    public EnemyMove EnemyMoveState { get; set; }
+    [Header("Patrol Settings")]
+    [SerializeField] private LayerMask _collectableMask;
+    [SerializeField] private float _repeatStateTimer;
+    [SerializeField] private float _checkRadius;
+    
+    public EnemyIdle EnemyIdle { get; set; }
+    public EnemyMove EnemyMove { get; set; }
+    public EnemyPatrol EnemyPatrol { get; set; }
+    public EnemyEat EnemyEat { get; set; }
+    public Collectable CurrentEatTarget { get; set; }
     private StateMachine _enemyStateMachine;
     private float _speed;
     private Vector3 _currentWaypointDirection;
@@ -26,11 +34,11 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         _enemyStateMachine = new StateMachine();
-        EnemyIdleState = new EnemyIdle(_enemyStateMachine, this);
-        EnemyMoveState = new EnemyMove(_enemyStateMachine, this);
-        _enemyStateMachine.Initialize(EnemyIdleState);
-
-
+        EnemyIdle = new EnemyIdle(_enemyStateMachine, this);
+        EnemyMove = new EnemyMove(_enemyStateMachine, this);
+        EnemyPatrol = new EnemyPatrol(_enemyStateMachine, this, _collectableMask, _repeatStateTimer, _checkRadius);
+        EnemyEat = new EnemyEat(_enemyStateMachine, this);
+        _enemyStateMachine.Initialize(EnemyIdle);
     }
 
     void Update()
@@ -42,8 +50,16 @@ public class Enemy : MonoBehaviour
         _enemyStateMachine.FixedUpdateState();
     }
 
+    public void MoveDistanceCheck(Vector3 CheckDistancePosition, EnemyState successChangeState,float distance)
+    {
+         if (Vector3.Distance(transform.position, CheckDistancePosition) < distance)
+        {
+            _enemyStateMachine.ChangeState(successChangeState);
+        }
+    }
     public void Move(Vector3 moveDirection)
     {
+        LookRotationToTarget(moveDirection);
         _rb.velocity = moveDirection * _speed;
     }
     public Vector3 GetMoveDirection() => (_currentWaypointDirection = _waypoints[_waypointIndex].position - transform.position).normalized;
@@ -55,13 +71,31 @@ public class Enemy : MonoBehaviour
             return;
         _waypointIndex++;
     }
-    public void LookRotationToTarget()
+    public void LookRotationToTarget(Vector3 lookRotationToTarget)
     {
-        Quaternion lookRotation = Quaternion.LookRotation(_currentWaypointDirection);
+        Quaternion lookRotation = Quaternion.LookRotation(lookRotationToTarget);
         transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, .15f);
     }
 
+    public IEnumerator TurnEnemy(Transform turnObject)
+    {
+        float _turn = 0;
 
+        while (_turn <= 1f)
+        {
+            float step = 72f * Time.deltaTime;
+            _turn += Time.deltaTime;
+            turnObject.Rotate(0, step, 0);
+            yield return null;
+        }
+        Debug.Log("Finished?");
+        yield return new WaitForSeconds(.1f);
+        _enemyStateMachine.ChangeState(EnemyPatrol);
+    }
+    public void DestroyEatObject()
+    {
+        Destroy(CurrentEatTarget.gameObject);    
+    }
 
     void OnDrawGizmos()
     {

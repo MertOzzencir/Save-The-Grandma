@@ -8,12 +8,12 @@ public class Collectable : MonoBehaviour
 {
     public CollectableSO _collectableData;
     public ToolType ToolType { get; set; }
+    public bool Collected;
 
     private bool _canTurn;
     private Vector3 _targetPosition;
     private float sinX;
     private float up;
-    public bool _collected;
     public virtual void Start()
     {
         ToolType = _collectableData.InventoryInformation.ToolCanGather;
@@ -29,9 +29,9 @@ public class Collectable : MonoBehaviour
 
     public virtual void Collect(ToolType toolType)
     {
-        if (toolType == ToolType && !_collected)
+        if (toolType == ToolType && !Collected)
         {
-            _collected = true;
+            Collected = true;
             InventoryManager.Instance.CollectItem(_collectableData.InventoryInformation);
             StartCoroutine(CollectAnimation());
             Destroy(gameObject,1f);
