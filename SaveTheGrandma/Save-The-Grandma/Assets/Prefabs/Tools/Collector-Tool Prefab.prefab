@@ -186,7 +186,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ToolData: {fileID: 11400000, guid: 6d0d37d44bea03042ba449195c35c11c, type: 2}
-  SourceLayer:
+  TargetLayer:
     serializedVersion: 2
     m_Bits: 128
   RB: {fileID: 6354479189294741090}

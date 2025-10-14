@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -14,30 +15,34 @@ public class Enemy : MonoBehaviour
     [SerializeField] private LayerMask _collectableMask;
     [SerializeField] private float _repeatStateTimer;
     [SerializeField] private float _checkRadius;
-    
+
     public EnemyIdle EnemyIdle { get; set; }
     public EnemyMove EnemyMove { get; set; }
     public EnemyPatrol EnemyPatrol { get; set; }
     public EnemyEat EnemyEat { get; set; }
+    public EnemyStunned EnemyStunned{ get; set; }
     public Collectable CurrentEatTarget { get; set; }
     private StateMachine _enemyStateMachine;
     private float _speed;
-    private Vector3 _currentWaypointDirection;
-    public int _waypointIndex{ get; set; }
+    public int _waypointIndex { get; set; }
+    public Vector3 StunnedDirection{ get; set; }
     private Rigidbody _rb;
+    private Animator _anim;
 
     void Awake()
     {
         _rb = GetComponent<Rigidbody>();
+        _anim = GetComponentInChildren<Animator>();
         _speed = Random.Range(_speedMinMax.x, _speedMinMax.y);
     }
     void Start()
     {
         _enemyStateMachine = new StateMachine();
-        EnemyIdle = new EnemyIdle(_enemyStateMachine, this);
-        EnemyMove = new EnemyMove(_enemyStateMachine, this);
-        EnemyPatrol = new EnemyPatrol(_enemyStateMachine, this, _collectableMask, _repeatStateTimer, _checkRadius);
-        EnemyEat = new EnemyEat(_enemyStateMachine, this);
+        EnemyIdle = new EnemyIdle(_enemyStateMachine, this,_anim);
+        EnemyMove = new EnemyMove(_enemyStateMachine, this,_anim);
+        EnemyPatrol = new EnemyPatrol(_enemyStateMachine, this,_anim, _collectableMask, _repeatStateTimer, _checkRadius);
+        EnemyEat = new EnemyEat(_enemyStateMachine, this, _anim);
+        EnemyStunned = new EnemyStunned(_enemyStateMachine, this,_anim,StunnedDirection);
         _enemyStateMachine.Initialize(EnemyIdle);
     }
 
@@ -60,15 +65,21 @@ public class Enemy : MonoBehaviour
     public void Move(Vector3 moveDirection)
     {
         LookRotationToTarget(moveDirection);
-        _rb.velocity = moveDirection * _speed;
+        Vector3 sa;
+        sa = _rb.velocity;
+        _rb.velocity = new Vector3(moveDirection.x, 0, moveDirection.z) * _speed;
+        _rb.velocity = new Vector3(_rb.velocity.x,sa.y,_rb.velocity.z);
     }
-    public Vector3 GetMoveDirection() => (_currentWaypointDirection = _waypoints[_waypointIndex].position - transform.position).normalized;
+    public Vector3 GetMoveDirection() => (_waypoints[_waypointIndex].position - transform.position).normalized;
     public Transform GetCurrentWayPoint() => _waypoints[_waypointIndex];
   
     public void FindNextWayPoint()
     {
-        if (_waypointIndex >= _waypoints.Length - 1 )
+        if (_waypointIndex >= _waypoints.Length - 1)
+        {
+            _waypointIndex = 0;    
             return;
+        }
         _waypointIndex++;
     }
     public void LookRotationToTarget(Vector3 lookRotationToTarget)
@@ -77,7 +88,7 @@ public class Enemy : MonoBehaviour
         transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, .15f);
     }
 
-    public IEnumerator TurnEnemy(Transform turnObject)
+    public IEnumerator TurnEnemy(Rigidbody objectRB)
     {
         float _turn = 0;
 
@@ -85,16 +96,20 @@ public class Enemy : MonoBehaviour
         {
             float step = 72f * Time.deltaTime;
             _turn += Time.deltaTime;
-            turnObject.Rotate(0, step, 0);
+            Quaternion deltaRotation = Quaternion.Euler(0, step , 0);
+            objectRB.MoveRotation(objectRB.rotation * deltaRotation);
             yield return null;
         }
-        Debug.Log("Finished?");
-        yield return new WaitForSeconds(.1f);
+        yield return new WaitForSeconds(0.2f);
         _enemyStateMachine.ChangeState(EnemyPatrol);
     }
     public void DestroyEatObject()
     {
-        Destroy(CurrentEatTarget.gameObject);    
+        Destroy(CurrentEatTarget.gameObject);
+    }
+    public void Stunned()
+    {
+        _enemyStateMachine.ChangeState(EnemyStunned);
     }
 
     void OnDrawGizmos()

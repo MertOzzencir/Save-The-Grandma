@@ -3,7 +3,7 @@ using UnityEngine;
 public class EnemyEat : EnemyState
 {
     private float _timer;
-    public EnemyEat(StateMachine stateMachine, Enemy enemy) : base(stateMachine, enemy)
+    public EnemyEat(StateMachine stateMachine, Enemy enemy,Animator anim) : base(stateMachine, enemy,anim)
     {
     }
     public override void Enter()

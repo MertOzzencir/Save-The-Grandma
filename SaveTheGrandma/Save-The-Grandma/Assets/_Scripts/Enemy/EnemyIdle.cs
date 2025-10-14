@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyIdle : EnemyState
 {
-    public EnemyIdle(StateMachine stateMachine,Enemy enemy) : base(stateMachine,enemy)
+    public EnemyIdle(StateMachine stateMachine,Enemy enemy,Animator anim) : base(stateMachine,enemy,anim)
     {
     }
 
@@ -13,9 +13,11 @@ public class EnemyIdle : EnemyState
     public override void Enter()
     {
         tempTimer = 0;
+        EnemyAnim.SetBool("canIdle", true);
     }
     public override void Exit()
     {
+        EnemyAnim.SetBool("canIdle", false);
     }
     public override void Update()
     {

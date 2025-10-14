@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class EnemyMove : EnemyState
 {
-    public EnemyMove(StateMachine stateMachine, Enemy enemy) : base(stateMachine, enemy)
+    public EnemyMove(StateMachine stateMachine, Enemy enemy,Animator anim) : base(stateMachine, enemy,anim)
     {
     }
     private Vector3 _moveDirection;
 
     public override void Enter()
     {
+        EnemyAnim.SetBool("canMove", true);
         _moveDirection = Enemy.GetMoveDirection();
     }
     public override void Exit()
     {
+        EnemyAnim.SetBool("canMove", false);
         Enemy.FindNextWayPoint();
 
     }

@@ -54,6 +54,14 @@ public class InputManager : MonoBehaviour
         _inputActions.Player.Inventory.performed += OnInventoryButton;
         _inputActions.Player.CloseTabs.performed += OnCloseTabs;
     }
+    public Vector2 Move()
+    {
+        return _inputActions.Player.WASD.ReadValue<Vector2>();
+    }
+    public Vector2 MouseScroolValue()
+    {
+        return Mouse.current.scroll.ReadValue();
+    }
 
     private void OnCloseTabs(InputAction.CallbackContext context)
     {

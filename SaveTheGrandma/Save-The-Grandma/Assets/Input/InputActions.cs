@@ -136,6 +136,24 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""WASD"",
+                    ""type"": ""Value"",
+                    ""id"": ""b7ef81d5-4513-404d-a0aa-b215b58a5641"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""MouseScrool"",
+                    ""type"": ""Value"",
+                    ""id"": ""bc34dce0-f4e9-4827-92f1-96caac6b2637"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -226,6 +244,72 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""CloseTabs"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""7db5099a-83db-44d8-ba7e-50f7461bc666"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""846df5d5-8d5b-455f-9480-6f82a620d756"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""dc664f90-b01b-4e4c-92ca-035893a5f2e0"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""b7ca08f2-295a-4825-a5f9-7182e37bedf8"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""fb70ce7d-bb22-43e9-a2bb-db00f5e0bc10"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a417d99a-5d4c-4c82-9faf-f1d862af085a"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseScrool"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -239,6 +323,8 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_Player_ToolPick = m_Player.FindAction("ToolPick", throwIfNotFound: true);
         m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
         m_Player_CloseTabs = m_Player.FindAction("CloseTabs", throwIfNotFound: true);
+        m_Player_WASD = m_Player.FindAction("WASD", throwIfNotFound: true);
+        m_Player_MouseScrool = m_Player.FindAction("MouseScrool", throwIfNotFound: true);
     }
 
     ~@InputActions()
@@ -324,6 +410,8 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_ToolPick;
     private readonly InputAction m_Player_Inventory;
     private readonly InputAction m_Player_CloseTabs;
+    private readonly InputAction m_Player_WASD;
+    private readonly InputAction m_Player_MouseScrool;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -355,6 +443,14 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/CloseTabs".
         /// </summary>
         public InputAction @CloseTabs => m_Wrapper.m_Player_CloseTabs;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/WASD".
+        /// </summary>
+        public InputAction @WASD => m_Wrapper.m_Player_WASD;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/MouseScrool".
+        /// </summary>
+        public InputAction @MouseScrool => m_Wrapper.m_Player_MouseScrool;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -396,6 +492,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @CloseTabs.started += instance.OnCloseTabs;
             @CloseTabs.performed += instance.OnCloseTabs;
             @CloseTabs.canceled += instance.OnCloseTabs;
+            @WASD.started += instance.OnWASD;
+            @WASD.performed += instance.OnWASD;
+            @WASD.canceled += instance.OnWASD;
+            @MouseScrool.started += instance.OnMouseScrool;
+            @MouseScrool.performed += instance.OnMouseScrool;
+            @MouseScrool.canceled += instance.OnMouseScrool;
         }
 
         /// <summary>
@@ -422,6 +524,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @CloseTabs.started -= instance.OnCloseTabs;
             @CloseTabs.performed -= instance.OnCloseTabs;
             @CloseTabs.canceled -= instance.OnCloseTabs;
+            @WASD.started -= instance.OnWASD;
+            @WASD.performed -= instance.OnWASD;
+            @WASD.canceled -= instance.OnWASD;
+            @MouseScrool.started -= instance.OnMouseScrool;
+            @MouseScrool.performed -= instance.OnMouseScrool;
+            @MouseScrool.canceled -= instance.OnMouseScrool;
         }
 
         /// <summary>
@@ -497,5 +605,19 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCloseTabs(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "WASD" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnWASD(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "MouseScrool" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMouseScrool(InputAction.CallbackContext context);
     }
 }

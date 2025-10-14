@@ -13,7 +13,7 @@ public class EnemyPatrol : EnemyState
     private Vector3 _moveDirection;
     private int _timer;
     private bool _canTurn;
-    public EnemyPatrol(StateMachine stateMachine, Enemy enemy, LayerMask collectableMask, float repeatTimer, float checkRadius) : base(stateMachine, enemy)
+    public EnemyPatrol(StateMachine stateMachine, Enemy enemy, Animator animator, LayerMask collectableMask, float repeatTimer, float checkRadius) : base(stateMachine, enemy, animator)
     {
         _collectableMask = collectableMask;
         _repeatStateTimer = repeatTimer;
@@ -22,6 +22,8 @@ public class EnemyPatrol : EnemyState
 
     public override void Enter()
     {
+        Enemy.transform.eulerAngles = new Vector3(0,Enemy.transform.eulerAngles.y,Enemy.transform.eulerAngles.z);
+        EnemyAnim.SetBool("canPatrol", true);
         _timer += 1;
         _canTurn = true;
         _collectables = Physics.OverlapSphere(Enemy.transform.position, _checkRadius, _collectableMask);
@@ -31,7 +33,7 @@ public class EnemyPatrol : EnemyState
             float isItInArea = Vector3.Dot(_moveDirection, Enemy.transform.forward);
             if (isItInArea > 0.5f)
             {
-                Enemy.CurrentEatTarget =a.GetComponent<Collectable>();
+                Enemy.CurrentEatTarget = a.GetComponent<Collectable>();
                 break;
             }
         }
@@ -39,17 +41,17 @@ public class EnemyPatrol : EnemyState
     }
     public override void Exit()
     {
+        EnemyAnim.SetBool("canPatrol", false);
         _collectables = null;
-        Debug.Log(_timer);
     }
     public override void Update()
     {
         if (Enemy.CurrentEatTarget != null)
         {
-            Enemy.MoveDistanceCheck(Enemy.CurrentEatTarget.transform.position, Enemy.EnemyEat, 2.5f);
+            Enemy.MoveDistanceCheck(Enemy.CurrentEatTarget.transform.position, Enemy.EnemyEat, 3.5f);
             _timer = 0;
         }
-        
+
         else
         {
             if (_timer <= _repeatStateTimer)
@@ -57,14 +59,12 @@ public class EnemyPatrol : EnemyState
                 if (_canTurn)
                 {
                     _canTurn = false;
-                    Debug.Log("Turning Begin");
-                    Enemy.StartCoroutine(Enemy.TurnEnemy(Enemy.transform));
+                    Enemy.StartCoroutine(Enemy.TurnEnemy(Enemy.transform.GetComponent<Rigidbody>()));
                 }
             }
             else
             {
                 _timer = 0;
-                Debug.Log("State Changed");
                 StateMachine.ChangeState(Enemy.EnemyIdle);
             }
         }

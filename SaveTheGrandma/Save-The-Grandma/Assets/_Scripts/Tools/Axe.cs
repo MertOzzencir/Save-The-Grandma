@@ -9,6 +9,7 @@ using UnityEngine;
 public class Axe : Tools
 {
 
+    private MotherSource _activeSource;
     private AnimationEventHandler _animEventHandler;
     private Animator _anim;
     private bool _isCanceled;

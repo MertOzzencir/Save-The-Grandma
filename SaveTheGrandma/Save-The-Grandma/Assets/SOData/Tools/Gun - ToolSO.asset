@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 174bfff5a77156144924a57dffef1ad8, type: 3}
-  m_Name: Gun - Empyt
+  m_Name: Gun - ToolSO
   m_EditorClassIdentifier: 
   TypeOfTool: 4
-  UseCoolDown: 0
-  AttackDamage: 0
-  UseRadius: 0
-  Prefab: {fileID: 0}
+  SpeedMultiplier: 1
+  AttackDamage: 125
+  UseRadius: 12
+  Prefab: {fileID: 8353410393933473817, guid: 847a9e4fe768f0c42b2581a2086eb202, type: 3}
