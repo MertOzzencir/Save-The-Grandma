@@ -238,6 +238,7 @@ GameObject:
   - component: {fileID: 5981068206740400366}
   - component: {fileID: 6876503158240466239}
   - component: {fileID: 8800825307925483293}
+  - component: {fileID: 445575018390963410}
   m_Layer: 11
   m_Name: Enemy
   m_TagString: Untagged
@@ -274,6 +275,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69befbb7ae3a56e478a51490e3d68b1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _attackDamage: 1
   _stateIcons:
   - {fileID: 21300000, guid: f09cfd4e708357e46858ddcc09a1c3ba, type: 3}
   - {fileID: 21300000, guid: 4e93371515d686140a46feefcb709117, type: 3}
@@ -281,7 +283,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 254e1495e802aed49a76cb7b0f228fa8, type: 3}
   _speedMinMax: {x: 8, y: 8}
   _sizeMinMax: {x: 0.75, y: 1.25}
-  _wayPoints: []
+  PathSurface: {fileID: 0}
   IdleTimer: 2
   _collectableMask:
     serializedVersion: 2
@@ -364,6 +366,19 @@ MonoBehaviour:
   _eatIndicator: {fileID: 7999065622910069423, guid: 5ea3ea11eec2abe4082a7a5de26f7087,
     type: 3}
   _stateIconGameObject: {fileID: 5590515333540910689}
+--- !u!114 &445575018390963410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3734752688173446799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8172db2d7093c1049b8023cdf1dcb1dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PathSurface: {fileID: 0}
 --- !u!1 &6925644492235289147
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,6 +17,7 @@ public class StateMachine
         _currentState.Exit();
         _currentState = nextState;
         _currentState.Enter();
+        //Debug.Log(_currentState);
     }
     public void UpdateState()
     {

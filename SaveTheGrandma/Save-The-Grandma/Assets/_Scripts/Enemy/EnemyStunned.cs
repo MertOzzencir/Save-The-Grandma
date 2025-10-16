@@ -14,6 +14,7 @@ public class EnemyStunned : EnemyState
     public override void Enter()
     {
         base.Enter();
+        Enemy.Grandma = null;
         IndicatorManager.RestartIndicator();
         Enemy.transform.forward = _dir;
         _timer = 0;

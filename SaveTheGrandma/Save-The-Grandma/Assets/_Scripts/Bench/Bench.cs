@@ -30,18 +30,30 @@ public class Bench : MonoBehaviour
     private int[] _refAmount = new int[2];
     private InventoryManager _inventory;
     private ToolUseManager _toolManager;
+    private EntityAudioManager _audioManager;
     void Start()
     {
+        _audioManager = GetComponent<EntityAudioManager>();
         _toolManager = FindObjectOfType<ToolUseManager>();
         SetCraftItem(_craftArrayIndex);
         _inventory = FindAnyObjectByType<InventoryManager>();
         _anim = GetComponentInChildren<Animator>();
+        _anim.GetComponent<AnimationEventHandler>().OnAnimEventFire += CraftClip;
     }
+
+    private void CraftClip()
+    {
+        _audioManager.VolumeSet(0.1f);
+        _audioManager.PlayClipByIndex(2);
+    }
+
     public void OpenCraftMenu()
     {
+        _audioManager.VolumeSet(1f);
         _openMenu = !_openMenu;
         if (_openMenu)
         {
+            _audioManager.PlayClipByIndex(0);
             _toolManager.SetUnactiveTool();
             _anim.SetBool("isOpen",true);
             BenchController.Instance.SetActiveBench(this);
@@ -50,6 +62,7 @@ public class Bench : MonoBehaviour
         }
         else
         {
+            _audioManager.PlayClipByIndex(1);
             _anim.SetBool("isOpen",false);
             BenchController.Instance.ResetActiveBench();
             _craftMenu.SetActive(_openMenu);

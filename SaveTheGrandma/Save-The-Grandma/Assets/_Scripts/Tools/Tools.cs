@@ -3,6 +3,7 @@ using UnityEngine;
 
 public abstract class Tools : MonoBehaviour
 {
+    public EntityAudioManager ToolAudioManager{ get; set;}
     public ToolsSO ToolData;
     public LayerMask TargetLayer;
     public Rigidbody RB;

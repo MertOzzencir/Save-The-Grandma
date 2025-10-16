@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
-using Unity.Burst.Intrinsics;
-using UnityEditor;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Axe : Tools
@@ -15,6 +10,7 @@ public class Axe : Tools
     private bool _isCanceled;
     void Awake()
     {
+        ToolAudioManager = GetComponent<EntityAudioManager>();
         _animEventHandler = GetComponentInChildren<AnimationEventHandler>();
         _anim = _animEventHandler.gameObject.GetComponent<Animator>();
         _animEventHandler.OnAnimEventFire += UseTool;
@@ -46,6 +42,8 @@ public class Axe : Tools
     {
         if (_activeSource != null)
         {
+            ToolAudioManager.SetRandomPitch();
+            ToolAudioManager.PlayEntityClip();
             float timer = _activeSource.SpawnOwner.SpawnTimer;
             _activeSource.Dig(ToolData.AttackDamage, ToolData.TypeOfTool, out bool isSourceDead);
             if (isSourceDead)

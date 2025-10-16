@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class EnemyMove : EnemyState
 {
-    public EnemyMove(StateMachine stateMachine, Enemy enemy,Animator anim,Sprite stateIcon,EntityIndicatorHandler indicatorManager) : base(stateMachine, enemy,anim,stateIcon,indicatorManager)
+    EntityPathFinding _pathFinder;
+
+    public EnemyMove(StateMachine stateMachine, Enemy enemy,Animator anim,Sprite stateIcon,EntityIndicatorHandler indicatorManager,EntityPathFinding pathFinder) : base(stateMachine, enemy,anim,stateIcon,indicatorManager)
     {
+        _pathFinder = pathFinder;
     }
     private Vector3 _moveDirection;
 
@@ -13,24 +16,24 @@ public class EnemyMove : EnemyState
     {
         base.Enter();
         EnemyAnim.SetBool("canMove", true);
-        _moveDirection = Enemy.GetMoveDirection();
+        _pathFinder.ChooseMovePosition();
+        _moveDirection = _pathFinder.MoveDirectionNormalized();
     }
     public override void Exit()
     {
         EnemyAnim.SetBool("canMove", false);
-        Enemy.FindNextWayPoint();
-
     }
     public override void Update()
     {
-        Enemy.MoveDistanceCheck(Enemy._wayPoints[Enemy._waypointIndex].position, Enemy.EnemyPatrol,2f);
+        Enemy.FindGrandma();
+        if (Enemy.Grandma != null)
+            StateMachine.ChangeState(Enemy.EnemyGrandmaChase);
+
+        Enemy.MoveDistanceCheck(Enemy.transform,_pathFinder.GetChoosedPosition(), Enemy.EnemyPatrol,7f);
     }
     public override void FixedUpdate()
     {
         Enemy.Move(_moveDirection);
-        Enemy.LookRotationToTarget(_moveDirection);
-
-
     }
 
 }

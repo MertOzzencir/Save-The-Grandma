@@ -46,6 +46,12 @@ public class CameraController : MonoBehaviour
     }
     void LateUpdate()
     {
-        transform.position = Vector3.SmoothDamp(transform.position, transform.position + new Vector3(_moveInput.x, 0, _moveInput.y) *_moveMultiplier,ref _moveVelocity,_moveSmoothTime);
+        Vector3 right = transform.right;
+        Vector3 up = transform.forward;
+        right.y = 0;
+        up.y = 0;
+        right.Normalize();
+        up.Normalize();
+        transform.position = Vector3.SmoothDamp(transform.position, transform.position + (right * -_moveInput.x + up* - _moveInput.y)*_moveMultiplier,ref _moveVelocity,_moveSmoothTime);
     }
 }

@@ -1,6 +1,5 @@
 
 
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -10,12 +9,14 @@ public class Collectable : MonoBehaviour
     public ToolType ToolType { get; set; }
     public bool Collected;
 
+    private EntityAudioManager _audioManager;
     private bool _canTurn;
     private Vector3 _targetPosition;
     private float sinX;
     private float up;
     public virtual void Start()
     {
+        _audioManager = GetComponent<EntityAudioManager>();
         ToolType = _collectableData.InventoryInformation.ToolCanGather;
         SetIdleAnimation();
     }
@@ -31,6 +32,8 @@ public class Collectable : MonoBehaviour
     {
         if (toolType == ToolType && !Collected)
         {
+            _audioManager.SetRandomPitch();
+            _audioManager.PlayEntityClip();
             Collected = true;
             InventoryManager.Instance.CollectItem(_collectableData.InventoryInformation);
             StartCoroutine(CollectAnimation());

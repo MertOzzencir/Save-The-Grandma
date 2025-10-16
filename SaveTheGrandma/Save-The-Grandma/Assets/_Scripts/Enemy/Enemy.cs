@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class Enemy : Spawnable
 {
-  
+
+    [SerializeField] private int _attackDamage;
     [Header("Icons and Indicators")]
     [SerializeField] private Sprite[] _stateIcons;
     [Header("Movement")]
     [SerializeField] private Vector2 _speedMinMax;
     [SerializeField] private Vector2 _sizeMinMax;
-    public Transform[] _wayPoints;
 
     [Header("State Settings")]
     public float IdleTimer;
@@ -30,20 +30,22 @@ public class Enemy : Spawnable
     private float _speed;
     public int _waypointIndex { get; set; }
     public Vector3 StunnedDirection { get; set; }
-    public Grandma Grandma{ get; set; }
+    public Grandma Grandma { get; set; }
+    public bool IsAttackOverload { get; set; }
+    public bool AttackMovement{ get; set; }
     private Rigidbody _rb;
     private Animator _anim;
-    private EnemyWayPoints _wayPointsOfEnemy;
     private EntityIndicatorHandler _indicatorManager;
+    private EntityPathFinding _entityPathFinder;
+
 
     void Awake()
     {
+        _entityPathFinder = GetComponent<EntityPathFinding>();
         _indicatorManager = GetComponent<EntityIndicatorHandler>();
-        _wayPointsOfEnemy = FindObjectOfType<EnemyWayPoints>();
         _rb = GetComponent<Rigidbody>();
         _anim = GetComponentInChildren<Animator>();
 
-        _wayPoints = _wayPointsOfEnemy.Points;
  
         _speed = Random.Range(_speedMinMax.x, _speedMinMax.y);
         float randomSize = Random.Range(_sizeMinMax.x, _sizeMinMax.y);
@@ -55,11 +57,11 @@ public class Enemy : Spawnable
     {
         _enemyStateMachine = new StateMachine();
         EnemyIdle = new EnemyIdle(_enemyStateMachine, this, _anim,_stateIcons[2],_indicatorManager);
-        EnemyMove = new EnemyMove(_enemyStateMachine, this, _anim,_stateIcons[1],_indicatorManager);
+        EnemyMove = new EnemyMove(_enemyStateMachine, this, _anim,_stateIcons[1],_indicatorManager,_entityPathFinder);
         EnemyPatrol = new EnemyPatrol(_enemyStateMachine, this, _anim,_stateIcons[3],_indicatorManager, _collectableMask, _repeatStateTimer, _checkRadius);
         EnemyEat = new EnemyEat(_enemyStateMachine, this, _anim,_stateIcons[0],_indicatorManager);
         EnemyStunned = new EnemyStunned(_enemyStateMachine, this, _anim, _stateIcons[2],_indicatorManager, StunnedDirection);
-        EnemyGrandmaChase = new EnemyGrandmaChase(_enemyStateMachine, this, _anim, _stateIcons[0],_indicatorManager,Grandma);
+        EnemyGrandmaChase = new EnemyGrandmaChase(_enemyStateMachine, this, _anim, _stateIcons[0],_indicatorManager,_entityPathFinder);
         _enemyStateMachine.Initialize(EnemyIdle);
     }
 
@@ -72,51 +74,22 @@ public class Enemy : Spawnable
         _enemyStateMachine.FixedUpdateState();
     }
 
-    public void MoveDistanceCheck(Vector3 CheckDistancePosition, EnemyState successChangeState, float distance)
+    public void MoveDistanceCheck(Transform from,Vector3 to, EnemyState successChangeState, float distance)
     {
-        if (Vector3.Distance(transform.position, CheckDistancePosition) < distance)
+        if (Vector3.Distance(from.position, to) < distance)
         {
             _enemyStateMachine.ChangeState(successChangeState);
         }
     }
     public void Move(Vector3 moveDirection)
     {
-        LookRotationToTarget(moveDirection);
+        _entityPathFinder.LookRotationToTarget(moveDirection,.2f);
         Vector3 sa;
         sa = _rb.velocity;
         _rb.velocity = new Vector3(moveDirection.x, 0, moveDirection.z) * _speed;
         _rb.velocity = new Vector3(_rb.velocity.x, sa.y, _rb.velocity.z);
     }
-    public Vector3 GetMoveDirection() => (_wayPoints[_waypointIndex].position - transform.position).normalized;
-    public Transform GetCurrentWayPoint() => _wayPoints[_waypointIndex];
 
-    public void FindNextWayPoint()
-    {
-        if (_waypointIndex >= _wayPoints.Length - 1)
-        {
-            _waypointIndex = 0;
-            return;
-        }
-        FindGrandma();
-        _waypointIndex++;
-    }
-    public void FindGrandma()
-    {
-        Debug.Log("Trying to Find Grandma");
-        Collider[] grandma = Physics.OverlapSphere(transform.position, _checkRadius);
-        foreach(var a in grandma)
-        {
-            if(a.TryGetComponent(out Grandma gm)){
-                Debug.Log("I found the Grandma");
-                Grandma = gm;
-            }
-        }
-    }
-    public void LookRotationToTarget(Vector3 lookRotationToTarget)
-    {
-        Quaternion lookRotation = Quaternion.LookRotation(lookRotationToTarget);
-        transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, .15f);
-    }
 
     public IEnumerator TurnEnemy(Rigidbody objectRB)
     {
@@ -133,6 +106,33 @@ public class Enemy : Spawnable
         yield return new WaitForSeconds(0.2f);
         _enemyStateMachine.ChangeState(EnemyPatrol);
     }
+    private float _timer;
+    public void FindGrandma()
+    {
+        _timer += Time.deltaTime;
+        if (_timer < 1.5f)
+            return;
+        _timer = 0;
+        Debug.Log("Trying to Find Grandma");
+        Collider[] grandma = Physics.OverlapSphere(transform.position, 25f);
+        foreach(var a in grandma)
+        {
+            if(a.TryGetComponent(out Grandma gm)){
+                Debug.Log("I found the Grandma");
+                Grandma = gm;
+            }
+        }
+    }
+
+    public IEnumerator AttackToGrandma(Vector3 dir)
+    {
+        _rb.AddForce(dir * 100f, ForceMode.Impulse);
+        Debug.Log("Attacked");
+        Grandma.GetComponent<EntityHealth>().GetDamage(_attackDamage);
+        yield return new WaitForSeconds(1f);
+        IsAttackOverload = false;
+        AttackMovement = true;
+    }
     public void DestroyEatObject()
     {
         Destroy(CurrentEatTarget.gameObject);
@@ -148,11 +148,5 @@ public class Enemy : Spawnable
         Destroy(gameObject,1);
     }
 
-    void OnDrawGizmos()
-    {
-        foreach (var a in _wayPoints)
-        {
-            Gizmos.DrawWireSphere(a.position, 2f);
-        }
-    }
+   
 }

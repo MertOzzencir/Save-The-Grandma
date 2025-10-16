@@ -23,6 +23,7 @@ public class EnemyPatrol : EnemyState
     public override void Enter()
     {
         base.Enter();
+        Enemy.FindGrandma();
         Enemy.transform.eulerAngles = new Vector3(0,Enemy.transform.eulerAngles.y,Enemy.transform.eulerAngles.z);
         EnemyAnim.SetBool("canPatrol", true);
         _timer += 1;
@@ -47,10 +48,16 @@ public class EnemyPatrol : EnemyState
     }
     public override void Update()
     {
+        Enemy.FindGrandma();
+        if (Enemy.Grandma != null)
+        {
+            StateMachine.ChangeState(Enemy.EnemyGrandmaChase);
+            return;
+        }
         if (Enemy.CurrentEatTarget != null)
         {
             IndicatorManager.ImplementEatIndicator(Enemy.CurrentEatTarget.transform);
-            Enemy.MoveDistanceCheck(Enemy.CurrentEatTarget.transform.position, Enemy.EnemyEat, 4f);
+            Enemy.MoveDistanceCheck(Enemy.transform,Enemy.CurrentEatTarget.transform.position, Enemy.EnemyEat, 4f);
             _timer = 0;
         }
 
