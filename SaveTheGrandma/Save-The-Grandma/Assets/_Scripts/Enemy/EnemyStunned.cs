@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EnemyStunned : EnemyState
 {
-    public EnemyStunned(StateMachine stateMachine, Enemy enemy, Animator animator,Vector3 dir) : base(stateMachine, enemy, animator)
+    public EnemyStunned(StateMachine stateMachine, Enemy enemy, Animator animator,Sprite stateIcon,EntityIndicatorHandler indicatorManager,Vector3 dir) : base(stateMachine, enemy, animator,stateIcon,indicatorManager)
     {
         _dir = dir;
     }
@@ -13,6 +13,8 @@ public class EnemyStunned : EnemyState
     private float _timer;
     public override void Enter()
     {
+        base.Enter();
+        IndicatorManager.RestartIndicator();
         Enemy.transform.forward = _dir;
         _timer = 0;
         Enemy.CurrentEatTarget = null;

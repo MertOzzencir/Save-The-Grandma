@@ -46,7 +46,7 @@ public class Axe : Tools
     {
         if (_activeSource != null)
         {
-            float timer = _activeSource._sourceSO.SpawnTimer;
+            float timer = _activeSource.SpawnOwner.SpawnTimer;
             _activeSource.Dig(ToolData.AttackDamage, ToolData.TypeOfTool, out bool isSourceDead);
             if (isSourceDead)
             {
@@ -73,6 +73,7 @@ public class Axe : Tools
             _activeSource = null;
             isOverload = false;
             _isCanceled = true;
+            transform.up = Vector3.up;
         }
         else
             _isCanceled = false;

@@ -3,11 +3,12 @@ using UnityEngine;
 public class EnemyEat : EnemyState
 {
     private float _timer;
-    public EnemyEat(StateMachine stateMachine, Enemy enemy,Animator anim) : base(stateMachine, enemy,anim)
+    public EnemyEat(StateMachine stateMachine, Enemy enemy,Animator anim,Sprite stateIcon,EntityIndicatorHandler indicatorManager) : base(stateMachine, enemy,anim,stateIcon,indicatorManager)
     {
     }
     public override void Enter()
     {
+        base.Enter();
         Enemy.CurrentEatTarget.Collected = true;
         Enemy.DestroyEatObject();
         Enemy.CurrentEatTarget = null;

@@ -13,7 +13,7 @@ public class EnemyPatrol : EnemyState
     private Vector3 _moveDirection;
     private int _timer;
     private bool _canTurn;
-    public EnemyPatrol(StateMachine stateMachine, Enemy enemy, Animator animator, LayerMask collectableMask, float repeatTimer, float checkRadius) : base(stateMachine, enemy, animator)
+    public EnemyPatrol(StateMachine stateMachine, Enemy enemy, Animator animator,Sprite stateIcon,EntityIndicatorHandler indicatorManager, LayerMask collectableMask, float repeatTimer, float checkRadius) : base(stateMachine, enemy, animator,stateIcon,indicatorManager)
     {
         _collectableMask = collectableMask;
         _repeatStateTimer = repeatTimer;
@@ -22,6 +22,7 @@ public class EnemyPatrol : EnemyState
 
     public override void Enter()
     {
+        base.Enter();
         Enemy.transform.eulerAngles = new Vector3(0,Enemy.transform.eulerAngles.y,Enemy.transform.eulerAngles.z);
         EnemyAnim.SetBool("canPatrol", true);
         _timer += 1;
@@ -48,7 +49,8 @@ public class EnemyPatrol : EnemyState
     {
         if (Enemy.CurrentEatTarget != null)
         {
-            Enemy.MoveDistanceCheck(Enemy.CurrentEatTarget.transform.position, Enemy.EnemyEat, 3.5f);
+            IndicatorManager.ImplementEatIndicator(Enemy.CurrentEatTarget.transform);
+            Enemy.MoveDistanceCheck(Enemy.CurrentEatTarget.transform.position, Enemy.EnemyEat, 4f);
             _timer = 0;
         }
 

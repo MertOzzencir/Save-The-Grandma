@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class EnemyMove : EnemyState
 {
-    public EnemyMove(StateMachine stateMachine, Enemy enemy,Animator anim) : base(stateMachine, enemy,anim)
+    public EnemyMove(StateMachine stateMachine, Enemy enemy,Animator anim,Sprite stateIcon,EntityIndicatorHandler indicatorManager) : base(stateMachine, enemy,anim,stateIcon,indicatorManager)
     {
     }
     private Vector3 _moveDirection;
 
     public override void Enter()
     {
+        base.Enter();
         EnemyAnim.SetBool("canMove", true);
         _moveDirection = Enemy.GetMoveDirection();
     }
@@ -22,7 +23,7 @@ public class EnemyMove : EnemyState
     }
     public override void Update()
     {
-        Enemy.MoveDistanceCheck(Enemy._waypoints[Enemy._waypointIndex].position, Enemy.EnemyPatrol,2f);
+        Enemy.MoveDistanceCheck(Enemy._wayPoints[Enemy._waypointIndex].position, Enemy.EnemyPatrol,2f);
     }
     public override void FixedUpdate()
     {

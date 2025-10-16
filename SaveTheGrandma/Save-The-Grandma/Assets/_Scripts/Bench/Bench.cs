@@ -29,8 +29,10 @@ public class Bench : MonoBehaviour
     private Collectable[] _refCollectables = new Collectable[2];
     private int[] _refAmount = new int[2];
     private InventoryManager _inventory;
+    private ToolUseManager _toolManager;
     void Start()
     {
+        _toolManager = FindObjectOfType<ToolUseManager>();
         SetCraftItem(_craftArrayIndex);
         _inventory = FindAnyObjectByType<InventoryManager>();
         _anim = GetComponentInChildren<Animator>();
@@ -40,6 +42,7 @@ public class Bench : MonoBehaviour
         _openMenu = !_openMenu;
         if (_openMenu)
         {
+            _toolManager.SetUnactiveTool();
             _anim.SetBool("isOpen",true);
             BenchController.Instance.SetActiveBench(this);
             _craftMenu.SetActive(_openMenu);

@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class EnemyIdle : EnemyState
 {
-    public EnemyIdle(StateMachine stateMachine,Enemy enemy,Animator anim) : base(stateMachine,enemy,anim)
+    public EnemyIdle(StateMachine stateMachine,Enemy enemy,Animator anim,Sprite stateIcon,EntityIndicatorHandler indicatorManager) : base(stateMachine,enemy,anim,stateIcon,indicatorManager)
     {
+        
     }
 
 
     private float tempTimer;
     public override void Enter()
     {
+        base.Enter();
         tempTimer = 0;
         EnemyAnim.SetBool("canIdle", true);
     }

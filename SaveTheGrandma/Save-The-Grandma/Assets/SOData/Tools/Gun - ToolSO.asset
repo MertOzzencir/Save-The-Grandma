@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TypeOfTool: 4
   SpeedMultiplier: 1
-  AttackDamage: 125
+  AttackDamage: 250
   UseRadius: 12
   Prefab: {fileID: 8353410393933473817, guid: 847a9e4fe768f0c42b2581a2086eb202, type: 3}

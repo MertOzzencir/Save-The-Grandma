@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class MotherSource : MonoBehaviour
+public class MotherSource : Spawnable
 {
 
     public SourceSO _sourceSO;
@@ -14,8 +14,7 @@ public class MotherSource : MonoBehaviour
     private List<ChildSource> _allChildInfo = new List<ChildSource>();
     private int _totalChild;
     private int _indexOfChildCount = 0;
-    private Spawner _ownSpawnObject;
-    void Awake()
+     void Awake()
     {
         _childMaterials = GetComponentsInChildren<ChildSource>();
         _totalChild = transform.childCount;
@@ -77,14 +76,10 @@ public class MotherSource : MonoBehaviour
             _groundShadow.transform.parent = this.transform;
             DigPosition.parent = null;
             Destroy(DigPosition.gameObject, 2f);
-            _ownSpawnObject._spawnAvaliableArray[transform.parent].Avaliable = true;
-            _ownSpawnObject._spawnTimer = 0;
+            ResetSpawner();
             Destroy(this);
             Destroy(gameObject, 1f);
         }
     }
-    public void SetSpawnerObject(Spawner obj)
-    {
-        _ownSpawnObject = obj;
-    }
+    
 }

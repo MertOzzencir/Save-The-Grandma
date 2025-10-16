@@ -54,7 +54,10 @@ public class Collector : Tools
     private void ToolCanceled(bool obj)
     {
         if (!obj)
+        {
             _anim.SetBool("canCollect", false);
+            transform.up = Vector3.up;
+        }
     }
     void OnEnable()
     {

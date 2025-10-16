@@ -1501,6 +1501,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdfc82860487d3e46ba6b7cb3e197417, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spawnTimer: 2
   _sourceSO: {fileID: 11400000, guid: 8997bd8a1e29d1d4584cef4592de8ee1, type: 2}
   _groundShadow: {fileID: 977248189524106080}
   DigPosition: {fileID: 1997413714109089642}

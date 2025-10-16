@@ -5,15 +5,20 @@ using UnityEngine;
 public class CollectorGroundChecker : MonoBehaviour
 {
     [SerializeField] private Collider _groundCollider;
-    
-    void OnCollisionStay(Collision collision)
+    void OnTriggerStay(Collider other)
     {
-        float targetY = _groundCollider.bounds.max.y + 1f;
-        Transform objTransform = collision.transform;
-        if (collision.gameObject.GetComponent<Collectable>() != null)
+           float targetY = _groundCollider.bounds.max.y + 1f;
+        Transform objTransform = other.transform;
+        if (other.gameObject.GetComponent<Collectable>() != null)
         {
-            collision.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            collision.gameObject.transform.position = new Vector3(objTransform.position.x, targetY, objTransform.position.z);
+            other.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            other.gameObject.transform.position = new Vector3(objTransform.position.x, targetY, objTransform.position.z);
+        }
+        if(other.gameObject.TryGetComponent(out Enemy enemy))
+        {
+            Debug.Log("sa?");
+            enemy.HandleDeath();
         }
     }
+   
 }

@@ -24,14 +24,15 @@ public class Gun : Tools
         foreach (var a in _currentEnemy)
         {
             Vector3 slapDir = (a.transform.position - transform.position).normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(slapDir);
+            transform.rotation = lookRotation;
             Rigidbody enemyRB = a.GetComponent<Rigidbody>();
             enemyRB.velocity = Vector3.zero;
             enemyRB.AddForce(slapDir * _slapForce, ForceMode.Impulse);
             a.StunnedDirection = transform.position;
             a.Stunned();
-            
+
         }
-        Debug.Log("as kardeş");
         _anim.SetBool("useTool", false);
         isOverload = false;
         _currentEnemy.Clear();
@@ -48,7 +49,6 @@ public class Gun : Tools
             if (a.TryGetComponent<Enemy>(out Enemy enemy))
             {
                 _currentEnemy.Add(enemy);
-                Debug.Log("sa again");
                 _anim.SetBool("useTool", true);
                 isOverload = false;
             }
@@ -63,6 +63,7 @@ public class Gun : Tools
             isOverload = false;
             _anim.SetBool("useTool", false);
             _currentEnemy.Clear();
+            transform.up = Vector3.up;
         }
     }
     void OnEnable()

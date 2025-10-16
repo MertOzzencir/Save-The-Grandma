@@ -56,7 +56,7 @@ public class Collectable : MonoBehaviour
         Rigidbody rb = GetComponent<Rigidbody>();
         rb.isKinematic = true;
         _canTurn = true;
-        _targetPosition = transform.position + new Vector3(0, 2.5f, 0);
+        _targetPosition = transform.position + new Vector3(0, 2f, 0);
         transform.up = Vector3.up;
     }
 

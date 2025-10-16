@@ -49,6 +49,8 @@ public class ToolUseManager : MonoBehaviour
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, _groundMask))
             {
                 _pickedObject.transform.position = Vector3.Lerp(_pickedObject.transform.position, hit.point + _moveOffSet, .25f);
+                Debug.Log("Rotate?");
+                _pickedObject.transform.Rotate(0, 30* Time.deltaTime, 0);
             }
         }
 
@@ -59,27 +61,31 @@ public class ToolUseManager : MonoBehaviour
     {
         if (_pickedObject == null)
         {
-            CreateNewTool(toolSO);
+            SetActiveTool(toolSO);
         }
         else if (_pickedObject?.ToolData == toolSO)
         {
-            DestroyTool();
+            SetUnactiveTool();
         }
         else
         {
-            DestroyTool();
-            CreateNewTool(toolSO);
+            SetUnactiveTool();
+            SetActiveTool(toolSO);
         }
     }
 
-    private void DestroyTool()
+    public void SetUnactiveTool()
     {
-        _pickedObject.UnPicked();
-        _pickedObject.gameObject.SetActive(false);
-        _pickedObject = null;
+        if (_pickedObject != null)
+        {
+            _pickedObject.UnPicked();
+            _pickedObject.gameObject.SetActive(false);
+            _pickedObject = null;
+        }
+
     }
 
-    private void CreateNewTool(ToolsSO toolSO)
+    private void SetActiveTool(ToolsSO toolSO)
     {
         _pickedObject = _useableTools.FirstOrDefault(value => value.ToolData.TypeOfTool == toolSO.TypeOfTool);
         _pickedObject.gameObject.SetActive(true);

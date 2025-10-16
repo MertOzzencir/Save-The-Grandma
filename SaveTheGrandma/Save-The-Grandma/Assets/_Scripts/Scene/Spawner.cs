@@ -6,16 +6,14 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    [SerializeField] private MotherSource _materialControllerToSpawnPrefab;
+    [SerializeField] private Spawnable _spawnPrefab;
     [SerializeField] private Transform[] _spawnPoints;
-    [SerializeField] private Vector3 _objSpawnRotation;
+    public float SpawnTimer;
+    private Vector3 _objSpawnRotation;
 
     public Dictionary<Transform, SpawnSpec> _spawnAvaliableArray = new Dictionary<Transform, SpawnSpec>();
-    public float _spawnTimer { get; set; }
-    private float _spawnFreq;
-    void Awake()
+    void Start()
     {
-        _spawnFreq = _materialControllerToSpawnPrefab._sourceSO.SpawnTimer;
         foreach (var a in _spawnPoints)
         {
             _spawnAvaliableArray.Add(a, new SpawnSpec(true, 0));
@@ -28,7 +26,7 @@ public class Spawner : MonoBehaviour
             if (a.Value.Avaliable == false)
                 continue;
             a.Value.Timer += Time.deltaTime;
-            if ( a.Value.Timer > _spawnFreq )
+            if (a.Value.Timer >SpawnTimer)
             {
                 Spawn(a.Key);
                 a.Value.Avaliable = false;
@@ -39,7 +37,8 @@ public class Spawner : MonoBehaviour
 
     private void Spawn(Transform a)
     {
-        MotherSource refs = Instantiate(_materialControllerToSpawnPrefab, a.position, Quaternion.Euler(_objSpawnRotation));
+        _objSpawnRotation = new Vector3(0, UnityEngine.Random.Range(0, 180f), 0);
+        Spawnable refs = Instantiate(_spawnPrefab, a.position, Quaternion.Euler(_objSpawnRotation));
         refs.transform.parent = a.transform;
         refs.SetSpawnerObject(this);
     }
