@@ -49,7 +49,6 @@ public class ToolUseManager : MonoBehaviour
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, _groundMask))
             {
                 _pickedObject.transform.position = Vector3.Lerp(_pickedObject.transform.position, hit.point + _moveOffSet, .25f);
-                Debug.Log("Rotate?");
                 _pickedObject.transform.Rotate(0, 30* Time.deltaTime, 0);
             }
         }

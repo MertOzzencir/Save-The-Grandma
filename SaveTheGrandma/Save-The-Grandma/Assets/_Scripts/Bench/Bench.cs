@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UI;using UnityEngine.EventSystems;
+
 public class Bench : MonoBehaviour
 {
     [SerializeField] private Craftable[] _allCraftable;
@@ -19,6 +20,7 @@ public class Bench : MonoBehaviour
 
 
     public Craftable ActiveCraftItem { get; set; }
+    public bool UIColliderCheck{ get; set;}
 
     private Animator _anim;
     private bool _duringCraft;
@@ -41,6 +43,30 @@ public class Bench : MonoBehaviour
         InputManager.OnClose += CloseEsc;
 
     }
+    void Update()
+    {
+        if (_openMenu)
+        {
+             Debug.Log("abi?");
+            var ped = new PointerEventData(EventSystem.current) { position = Input.mousePosition };
+            var hits = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(ped, hits);
+
+            foreach (var h in hits)
+            {
+                var s = h.gameObject.GetComponentInParent<Canvas>();
+                if (s != null)
+                {
+                    Debug.Log("sa?");
+                    UIColliderCheck = true;
+                    return;
+                }
+
+            }
+            Debug.Log("as");
+            UIColliderCheck = false;
+        }
+    }
 
     private void CloseEsc()
     {
@@ -57,9 +83,10 @@ public class Bench : MonoBehaviour
         _audioManager.VolumeSet(0.25f);
         _audioManager.PlayClipByIndex(2);
     }
-
     public void OpenCraftMenu()
     {
+        
+
         _audioManager.VolumeSet(1f);
         _openMenu = !_openMenu;
         if (_openMenu)
@@ -74,6 +101,7 @@ public class Bench : MonoBehaviour
         }
         else
         {
+            UIColliderCheck = false;
             _audioManager.PlayClipByIndex(1);
             _anim.SetBool("isOpen", false);
             BenchController.Instance.ResetActiveBench();

@@ -142,6 +142,7 @@ public class Enemy : Spawnable
     public void HandleDeath()
     {
         ResetSpawner();
+        _indicatorManager.RestartIndicator();
         Destroy(gameObject,1);
     }
 

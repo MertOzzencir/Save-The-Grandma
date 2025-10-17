@@ -7,23 +7,34 @@ using UnityEngine.EventSystems;
 public class Player : MonoBehaviour
 {
     [SerializeField] private LayerMask _benchLayermask;
-
+    private Bench _selectedBench;
     void Start()
     {
         InputManager.OnLeftMouse += OpenBench;
         InputManager.OnLeftMouse += PickItem;
     }
 
+  
     private void OpenBench()
     {
+        if (_selectedBench != null)
+        {
+            if (_selectedBench.UIColliderCheck)
+            {
+                return;
+            }
+        }
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, _benchLayermask))
         {
-            Bench bench = hit.transform.GetComponent<Bench>();
-            if (bench == null)
+            _selectedBench = hit.transform.GetComponent<Bench>();
+            if (_selectedBench == null)
+            {
                 return;
-            bench.OpenCraftMenu();
+            }
+            _selectedBench.OpenCraftMenu();
+            Debug.Log("_checkforBench?");
         }
     }
     private void PickItem()

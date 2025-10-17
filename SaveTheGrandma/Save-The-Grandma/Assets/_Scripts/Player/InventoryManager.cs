@@ -27,15 +27,12 @@ public class InventoryManager : MonoBehaviour
 
     public void OpenInventory()
     {
-        Debug.Log("Trying to Inventory");
         if (!CanOpenInventory)
         {
-            Debug.Log("Open?");
             CanOpenInventory = true;
             _inventory.SetActive(CanOpenInventory);
         }
         else {
-            Debug.Log("Close");
             CanOpenInventory = false;
             _inventory.SetActive(CanOpenInventory);
         }
