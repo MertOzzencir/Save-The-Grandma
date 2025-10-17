@@ -113,12 +113,10 @@ public class Enemy : Spawnable
         if (_timer < 1.5f)
             return;
         _timer = 0;
-        Debug.Log("Trying to Find Grandma");
         Collider[] grandma = Physics.OverlapSphere(transform.position, 25f);
         foreach(var a in grandma)
         {
             if(a.TryGetComponent(out Grandma gm)){
-                Debug.Log("I found the Grandma");
                 Grandma = gm;
             }
         }
@@ -127,7 +125,6 @@ public class Enemy : Spawnable
     public IEnumerator AttackToGrandma(Vector3 dir)
     {
         _rb.AddForce(dir * 100f, ForceMode.Impulse);
-        Debug.Log("Attacked");
         Grandma.GetComponent<EntityHealth>().GetDamage(_attackDamage);
         yield return new WaitForSeconds(1f);
         IsAttackOverload = false;

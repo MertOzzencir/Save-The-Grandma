@@ -26,7 +26,7 @@ public class ItemSlot : MonoBehaviour
     public void ResetSlot()
     {
         ItemIcon.sprite = null;
-        ItemIcon.color = new Color(255, 255, 255, .1f);
+        ItemIcon.color = new Color(255, 255, 255, 0f);
         ItemAmount = 0;
         ItemAmountUI.text = "";
         InventoryType = InventoryType.Null;

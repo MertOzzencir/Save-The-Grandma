@@ -29,5 +29,6 @@ public class InventoryInformation
     public Sprite InventoryIcon;
     public ToolType ToolCanGather;
     public string InventoryName;
+    public int FontSize;
 
 }

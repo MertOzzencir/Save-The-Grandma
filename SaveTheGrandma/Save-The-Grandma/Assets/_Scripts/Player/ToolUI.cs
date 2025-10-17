@@ -8,6 +8,8 @@ public class ToolUI : MonoBehaviour
 {
     [SerializeField] private List<ToolUISpecs> _toolUIS;
     [SerializeField] private UnityEngine.Color _highLightedColor;
+    [SerializeField] private UnityEngine.Color _unLigthedColor;
+    [SerializeField] private Sprite _unHighlightedSprite;
 
 
     private ToolUISpecs _pickedUIToolElement;
@@ -20,7 +22,8 @@ public class ToolUI : MonoBehaviour
     {
         if (_pickedUIToolElement?.UITool == sO.TypeOfTool)
         {
-            _pickedUIToolElement._toolImage.GetComponent<Image>().color = Color.black;
+            _pickedUIToolElement._toolImage.GetComponent<Image>().sprite = _unHighlightedSprite;
+            _pickedUIToolElement._toolImage.GetComponent<Image>().color = _unLigthedColor;
             _pickedUIToolElement = null;
             return;
         }
@@ -28,14 +31,19 @@ public class ToolUI : MonoBehaviour
         {
             if (_pickedUIToolElement.UITool != sO.TypeOfTool)
             {
-                _pickedUIToolElement._toolImage.GetComponent<Image>().color = Color.black;
+                _pickedUIToolElement._toolImage.GetComponent<Image>().sprite = _unHighlightedSprite;
+                _pickedUIToolElement._toolImage.GetComponent<Image>().color =_unLigthedColor;
                 _pickedUIToolElement = null;
             }
         }
 
         _pickedUIToolElement = _toolUIS.FirstOrDefault(value => value.UITool == sO.TypeOfTool);
         if (_pickedUIToolElement != null)
+        {
+
             _pickedUIToolElement._toolImage.GetComponent<Image>().color = _highLightedColor;
+            _pickedUIToolElement._toolImage.GetComponent<Image>().sprite = null;
+        }
     }
 }
 

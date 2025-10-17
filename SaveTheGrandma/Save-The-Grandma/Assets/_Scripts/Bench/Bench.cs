@@ -14,7 +14,6 @@ public class Bench : MonoBehaviour
     [SerializeField] private TextMeshProUGUI[] _materialNameText;
     [SerializeField] private Image[] _materialReq;
     [SerializeField] private Image _outputIcon;
-    [SerializeField] private Transform SpawnPosition;
     [SerializeField] private float _craftTimer;
     [SerializeField] private Slider _craftUISlider;
 
@@ -39,11 +38,23 @@ public class Bench : MonoBehaviour
         _inventory = FindAnyObjectByType<InventoryManager>();
         _anim = GetComponentInChildren<Animator>();
         _anim.GetComponent<AnimationEventHandler>().OnAnimEventFire += CraftClip;
+        InputManager.OnClose += CloseEsc;
+
+    }
+
+    private void CloseEsc()
+    {
+        if (_openMenu == true)
+        {
+            _openMenu = true;
+            OpenCraftMenu();
+        }
+
     }
 
     private void CraftClip()
     {
-        _audioManager.VolumeSet(0.1f);
+        _audioManager.VolumeSet(0.25f);
         _audioManager.PlayClipByIndex(2);
     }
 
@@ -55,18 +66,18 @@ public class Bench : MonoBehaviour
         {
             _audioManager.PlayClipByIndex(0);
             _toolManager.SetUnactiveTool();
-            _anim.SetBool("isOpen",true);
+            _anim.SetBool("isOpen", true);
             BenchController.Instance.SetActiveBench(this);
             _craftMenu.SetActive(_openMenu);
-            _inventory.OpenWithBench(true);
+            if(_inventory.CanOpenInventory != true)
+                _inventory.OpenInventory();        
         }
         else
         {
             _audioManager.PlayClipByIndex(1);
-            _anim.SetBool("isOpen",false);
+            _anim.SetBool("isOpen", false);
             BenchController.Instance.ResetActiveBench();
             _craftMenu.SetActive(_openMenu);
-            _inventory.OpenWithBench(false);
         }
 
     }
@@ -85,6 +96,8 @@ public class Bench : MonoBehaviour
         {
             _refCollectables[0] = _allCraftable[index].SOData._recipes[0].Collectable;
             _materialReq[0].sprite = _refCollectables[0]._collectableData.InventoryInformation.InventoryIcon;
+            _materialReq[0].color = new Color(255, 255, 255, 1);
+            _materialReq[1].color = new Color(255, 255, 255, 0);
             _refAmount[0] = _allCraftable[index].SOData._recipes[0].Amount;
             _materialAmountText[0].text = _refAmount[0].ToString();
             _materialNameText[0].text = _allCraftable[index].SOData._recipes[0].Collectable._collectableData.InventoryInformation.InventoryName;
@@ -93,12 +106,14 @@ public class Bench : MonoBehaviour
         {
             _refCollectables[0] = _allCraftable[index].SOData._recipes[0].Collectable;
             _materialReq[0].sprite = _refCollectables[0]._collectableData.InventoryInformation.InventoryIcon;
+            _materialReq[0].color = new Color(255, 255, 255, 1);
             _refAmount[0] = _allCraftable[index].SOData._recipes[0].Amount;
             _materialAmountText[0].text = _refAmount[0].ToString();
             _materialNameText[0].text = _allCraftable[index].SOData._recipes[0].Collectable._collectableData.InventoryInformation.InventoryName;
 
             _refCollectables[1] = _allCraftable[index].SOData._recipes[1].Collectable;
             _materialReq[1].sprite = _refCollectables[1]._collectableData.InventoryInformation.InventoryIcon;
+            _materialReq[1].color = new Color(255, 255, 255, 1);
             _refAmount[1] = _allCraftable[index].SOData._recipes[1].Amount;
             _materialAmountText[1].text = _refAmount[1].ToString();
             _materialNameText[1].text = _allCraftable[index].SOData._recipes[1].Collectable._collectableData.InventoryInformation.InventoryName;
@@ -164,6 +179,7 @@ public class Bench : MonoBehaviour
         }
         InventoryManager.Instance.CollectItem(ActiveCraftItem.SOData.InventoryInformation);
         _outputIcon.sprite = ActiveCraftItem.SOData.InventoryInformation.InventoryIcon;
+        _outputIcon.color = new Color(255, 255, 255, 1);
         _craftUISlider.value = 0;
         _duringCraft = false;
         _craftUISlider.gameObject.SetActive(false);
@@ -176,6 +192,7 @@ public class Bench : MonoBehaviour
             return;
         _craftArrayIndex += Amount;
         _outputIcon.sprite = null;
+        _outputIcon.color = new Color(255, 255, 255, 0);
         if (_craftArrayIndex >= _allCraftable.Length)
             _craftArrayIndex = 0;
 

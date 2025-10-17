@@ -11,32 +11,37 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private ItemSlot[] _slots;
     [SerializeField] private GameObject _inventory;
 
-    private bool _canOpen;
+    public bool CanOpenInventory;
     void Start()
     {
         Instance = this;
         InputManager.OnTab += OpenInventory;
-        InputManager.OnClose += OpenInventory;
+        InputManager.OnClose += CloseEsc;
+    }
+
+    private void CloseEsc()
+    {
+        CanOpenInventory = true;
+        OpenInventory();
     }
 
     public void OpenInventory()
     {
-        if (_canOpen)
+        Debug.Log("Trying to Inventory");
+        if (!CanOpenInventory)
         {
-            _canOpen = false;
-            _inventory.SetActive(_canOpen);
+            Debug.Log("Open?");
+            CanOpenInventory = true;
+            _inventory.SetActive(CanOpenInventory);
         }
         else {
-            _canOpen = true;
-            _inventory.SetActive(_canOpen);
+            Debug.Log("Close");
+            CanOpenInventory = false;
+            _inventory.SetActive(CanOpenInventory);
         }
 
     }
-    public void OpenWithBench(bool checkFromBench)
-    {
-        _inventory.SetActive(checkFromBench);
-    }
-
+   
   
 
     public void CollectItem(InventoryInformation inventoryInformation)
@@ -66,6 +71,7 @@ public class InventoryManager : MonoBehaviour
                     a.UpdateItemAmount();
                     a.InventoryType = inventoryInformation.InventoryType;
                     a.MaterialName.text = inventoryInformation.InventoryName;
+                    a.MaterialName.fontSize = inventoryInformation.FontSize;
                     return;
                 }
             }

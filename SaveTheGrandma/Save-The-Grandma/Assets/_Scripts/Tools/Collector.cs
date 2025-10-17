@@ -10,7 +10,7 @@ public class Collector : Tools
     private bool _canUpdateMovement;
     private Animator _anim;
     private bool _canAnim;
-    void Start()
+    void Awake()
     {
         _anim = GetComponentInChildren<Animator>();
     }

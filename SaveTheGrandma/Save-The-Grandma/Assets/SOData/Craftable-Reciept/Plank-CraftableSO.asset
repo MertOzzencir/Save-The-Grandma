@@ -19,6 +19,7 @@ MonoBehaviour:
   Prefab: {fileID: 155772438679451981, guid: d7a492ca81097884a8772c16f8eb5540, type: 3}
   InventoryInformation:
     InventoryType: 5
-    InventoryIcon: {fileID: 21300000, guid: efe23ffa29c83fb428c67acf61827b58, type: 3}
+    InventoryIcon: {fileID: 21300000, guid: 1a628c72425fdf3409d10e12253dfcb8, type: 3}
     ToolCanGather: 3
     InventoryName: Plank
+    FontSize: 24

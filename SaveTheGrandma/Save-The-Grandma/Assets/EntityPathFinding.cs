@@ -12,7 +12,6 @@ public class EntityPathFinding : MonoBehaviour
         if (ground != null)
         {
             PathSurface = ground.GetComponent<Collider>();
-            Debug.Log(PathSurface.name);
         }
 
     }

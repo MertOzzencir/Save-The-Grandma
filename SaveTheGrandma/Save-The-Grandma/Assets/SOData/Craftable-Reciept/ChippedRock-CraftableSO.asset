@@ -22,6 +22,7 @@ MonoBehaviour:
   Prefab: {fileID: 5702620640839305611, guid: ee91dcfbfb29e4c4b8c5676f5fc3194d, type: 3}
   InventoryInformation:
     InventoryType: 4
-    InventoryIcon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+    InventoryIcon: {fileID: 21300000, guid: 66a8bf5b719e5844ba8b71a8fb2f28ca, type: 3}
     ToolCanGather: 3
     InventoryName: Chipped Rock
+    FontSize: 20
