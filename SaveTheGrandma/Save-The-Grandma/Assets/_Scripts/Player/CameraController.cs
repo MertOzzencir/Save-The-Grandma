@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -20,11 +21,10 @@ public class CameraController : MonoBehaviour
     private float _zoomVelocity;
     private Vector3 _moveVelocity;
 
-    private Camera cam;
+    [SerializeField] private CinemachineFreeLook _freeLookCam;
     void Start()
     {
-        cam = GetComponent<Camera>();
-        _zoom = cam.orthographicSize;
+        _zoom = _freeLookCam.m_Lens.OrthographicSize;
         _input = FindObjectOfType<InputManager>();
     }
     void Update()
@@ -40,7 +40,7 @@ public class CameraController : MonoBehaviour
 
         _zoom -= y * _zoomStep;
         _zoom = Mathf.Clamp(_zoom, _zoomLimits.x, _zoomLimits.y);
-        cam.orthographicSize = Mathf.SmoothDamp(cam.orthographicSize, _zoom, ref _zoomVelocity, _scroolSmoothTime);
+        _freeLookCam.m_Lens.OrthographicSize = Mathf.SmoothDamp(_freeLookCam.m_Lens.OrthographicSize, _zoom, ref _zoomVelocity, _scroolSmoothTime);
         
         
     }

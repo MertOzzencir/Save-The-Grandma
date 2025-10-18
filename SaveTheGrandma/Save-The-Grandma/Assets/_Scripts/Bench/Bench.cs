@@ -78,10 +78,16 @@ public class Bench : MonoBehaviour
 
     }
 
-    private void CraftClip()
+    private void CraftClip(int index)
     {
-        _audioManager.VolumeSet(0.25f);
-        _audioManager.PlayClipByIndex(2);
+        switch (index)
+        {
+            case 1: 
+             _audioManager.VolumeSet(0.25f);
+             _audioManager.PlayClipByIndex(2);
+            break;
+        }
+       
     }
     public void OpenCraftMenu()
     {

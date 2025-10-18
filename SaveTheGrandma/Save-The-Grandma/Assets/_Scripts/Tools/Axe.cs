@@ -10,6 +10,7 @@ public class Axe : Tools
     private bool _isCanceled;
     void Awake()
     {
+
         ToolAudioManager = GetComponent<EntityAudioManager>();
         _animEventHandler = GetComponentInChildren<AnimationEventHandler>();
         _anim = _animEventHandler.gameObject.GetComponent<Animator>();
@@ -38,29 +39,44 @@ public class Axe : Tools
         }
         isOverload = true;
     }
-    private void UseTool()
+    private void UseTool(int index)
     {
-        if (_activeSource != null)
+        Debug.Log(index);
+
+        switch (index)
         {
-            ToolAudioManager.SetRandomPitch();
-            ToolAudioManager.PlayEntityClip();
-            float timer = _activeSource.SpawnOwner.SpawnTimer;
-            _activeSource.Dig(ToolData.AttackDamage, ToolData.TypeOfTool, out bool isSourceDead);
-            if (isSourceDead)
-            {
-                _activeSource = null;
-                _anim.SetBool("useTool", false);
-                _anim.SetBool("hardUseTool", false);
-                Invoke(nameof(Tampon), timer + 0.1f);
-                isOverload = false;
-            }
+            case 1:
+                if (_activeSource != null)
+                {
+                    ToolAudioManager.SetRandomPitch();
+                    ToolAudioManager.PlayEntityClip(0,3);
+                    float timer = _activeSource.SpawnOwner.SpawnTimer;
+                    _activeSource.Dig(ToolData.AttackDamage, ToolData.TypeOfTool, out bool isSourceDead);
+                    if (isSourceDead)
+                    {
+                        _activeSource = null;
+                        _anim.SetBool("useTool", false);
+                        _anim.SetBool("hardUseTool", false);
+                        Invoke(nameof(Tampon), timer + 0.1f);
+                        isOverload = false;
+                    }
+                }
+                break;
+            case 2:
+                ToolAudioManager.PlayOneShotByIndex(3);
+            break;
         }
+
     }
     private void Tampon()
     {
         isOverload = false;
-        if(!_isCanceled)
+        if (!_isCanceled)
+        {
+            Debug.Log("sa?");
+
             StartUse();
+        }
     }
     private void ToolCanceled(bool obj)
     {

@@ -13,12 +13,8 @@ public class ToolUI : MonoBehaviour
 
 
     private ToolUISpecs _pickedUIToolElement;
-    void Start()
-    {
-        ToolPickManager.OnToolPicked += HighLightToolBar;
-    }
 
-    private void HighLightToolBar(ToolsSO sO)
+    public void HighLightToolBar(ToolsSO sO)
     {
         if (_pickedUIToolElement?.UITool == sO.TypeOfTool)
         {

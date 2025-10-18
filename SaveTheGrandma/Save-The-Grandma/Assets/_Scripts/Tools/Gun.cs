@@ -18,24 +18,29 @@ public class Gun : Tools
         _animEventHandler.OnAnimEventFire += UseTool;
     }
 
-    private void UseTool()
+    private void UseTool(int index)
     {
-
-        foreach (var a in _currentEnemy)
+        switch (index)
         {
-            Vector3 slapDir = (a.transform.position - transform.position).normalized;
-            Quaternion lookRotation = Quaternion.LookRotation(slapDir);
-            transform.rotation = lookRotation;
-            Rigidbody enemyRB = a.GetComponent<Rigidbody>();
-            enemyRB.velocity = Vector3.zero;
-            enemyRB.AddForce(slapDir * _slapForce, ForceMode.Impulse);
-            a.StunnedDirection = transform.position;
-            a.Stunned();
+            case 1:
+                foreach (var a in _currentEnemy)
+                {
+                    Vector3 slapDir = (a.transform.position - transform.position).normalized;
+                    Quaternion lookRotation = Quaternion.LookRotation(slapDir);
+                    transform.rotation = lookRotation;
+                    Rigidbody enemyRB = a.GetComponent<Rigidbody>();
+                    enemyRB.velocity = Vector3.zero;
+                    enemyRB.AddForce(slapDir * _slapForce, ForceMode.Impulse);
+                    a.StunnedDirection = transform.position;
+                    a.Stunned();
 
+                }
+                _anim.SetBool("useTool", false);
+                isOverload = false;
+                _currentEnemy.Clear();
+                break;
         }
-        _anim.SetBool("useTool", false);
-        isOverload = false;
-        _currentEnemy.Clear();
+
 
     }
 

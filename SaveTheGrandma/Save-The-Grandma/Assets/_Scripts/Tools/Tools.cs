@@ -9,7 +9,12 @@ public abstract class Tools : MonoBehaviour
     public Rigidbody RB;
     public Collider[] ObjectToCheck { get; set; }
 
-    public bool isOverload{ get; set; }
+    public bool isOverload { get; set; }
+    private ToolUI _toolUI;
+    void Awake()
+    {
+        
+    }
     public virtual void StartUse()
     {
         if (!isOverload)
@@ -20,10 +25,14 @@ public abstract class Tools : MonoBehaviour
     
     public virtual void Picked()
     {
+        _toolUI = FindAnyObjectByType<ToolUI>();
+        _toolUI.HighLightToolBar(ToolData);
         RB.isKinematic = true;
     }
     public virtual void UnPicked()
     {
+        _toolUI = FindAnyObjectByType<ToolUI>();
+        _toolUI.HighLightToolBar(ToolData);
         RB.isKinematic = false;
     }
     void OnDrawGizmos()

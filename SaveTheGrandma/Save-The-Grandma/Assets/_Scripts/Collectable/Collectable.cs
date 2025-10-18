@@ -33,7 +33,7 @@ public class Collectable : MonoBehaviour
         if (toolType == ToolType && !Collected)
         {
             _audioManager.SetRandomPitch();
-            _audioManager.PlayEntityClip();
+            _audioManager.PlayEntityClip(0,2);
             Collected = true;
             InventoryManager.Instance.CollectItem(_collectableData.InventoryInformation);
             StartCoroutine(CollectAnimation());
