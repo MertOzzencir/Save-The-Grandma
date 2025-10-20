@@ -41,7 +41,6 @@ public class Axe : Tools
     }
     private void UseTool(int index)
     {
-        Debug.Log(index);
 
         switch (index)
         {
@@ -73,7 +72,6 @@ public class Axe : Tools
         isOverload = false;
         if (!_isCanceled)
         {
-            Debug.Log("sa?");
 
             StartUse();
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,20 +8,32 @@ using UnityEngine.UI;
 
 public class ItemSlot : MonoBehaviour
 {
+    public event Action<bool,Image> OnAmountChange;
     public Image ItemIcon;
     public int ItemAmount;
     public TextMeshProUGUI ItemAmountUI;
     public InventoryType InventoryType;
     public TextMeshProUGUI MaterialName;
+    public Image BackGround;
 
-   
+    void Awake()
+    {
+        BackGround = GetComponent<Image>();
+    }
     public InventoryType GetSlotType()
     {
         return InventoryType;
     }
-    public void UpdateItemAmount()
+    public void UpdateItemAmount(int Amount)
     {
+        ItemAmount += Amount;
         ItemAmountUI.text = ItemAmount.ToString();
+        bool isPositive = Amount > 0 ? true : false;
+        if (gameObject.activeInHierarchy)
+        {
+            Debug.Log(gameObject.activeSelf);
+            OnAmountChange?.Invoke(isPositive,BackGround);
+        }
     }
 
     public void ResetSlot()

@@ -34,8 +34,9 @@ public class Bench : MonoBehaviour
     private EntityAudioManager _audioManager;
     void Start()
     {
+        _craftUISlider.maxValue = _craftTimer;
         _audioManager = GetComponent<EntityAudioManager>();
-        _toolManager = FindObjectOfType<ToolUseManager>();
+        _toolManager = FindAnyObjectByType<ToolUseManager>();
         SetCraftItem(_craftArrayIndex);
         _inventory = FindAnyObjectByType<InventoryManager>();
         _anim = GetComponentInChildren<Animator>();
@@ -47,7 +48,6 @@ public class Bench : MonoBehaviour
     {
         if (_openMenu)
         {
-             Debug.Log("abi?");
             var ped = new PointerEventData(EventSystem.current) { position = Input.mousePosition };
             var hits = new List<RaycastResult>();
             EventSystem.current.RaycastAll(ped, hits);
@@ -57,13 +57,11 @@ public class Bench : MonoBehaviour
                 var s = h.gameObject.GetComponentInParent<Canvas>();
                 if (s != null)
                 {
-                    Debug.Log("sa?");
                     UIColliderCheck = true;
                     return;
                 }
 
             }
-            Debug.Log("as");
             UIColliderCheck = false;
         }
     }
@@ -180,6 +178,7 @@ public class Bench : MonoBehaviour
                 }
             }
         }
+        Create();
 
     }
 
@@ -192,7 +191,7 @@ public class Bench : MonoBehaviour
         }
         return false;
     }
-    public void Create()
+    public virtual void Create()
     {
         if (CanCraft())
         {

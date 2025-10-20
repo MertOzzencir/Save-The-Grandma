@@ -33,7 +33,7 @@ public class Grandma : MonoBehaviour
         if (_canMove)
         {
             _pathFindging.LookRotationToTarget(_pathFindging.MoveDirectionNormalized(),0.5f);
-            _rb.velocity = new Vector3(_pathFindging.MoveDirectionNormalized().x, 0, _pathFindging.MoveDirectionNormalized().z) * _speed + new Vector3(0, _rb.velocity.y, 0);
+            _rb.linearVelocity = new Vector3(_pathFindging.MoveDirectionNormalized().x, 0, _pathFindging.MoveDirectionNormalized().z) * _speed + new Vector3(0, _rb.linearVelocity.y, 0);
         }
 
     }

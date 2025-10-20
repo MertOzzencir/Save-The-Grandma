@@ -31,10 +31,10 @@ public class Player : MonoBehaviour
             _selectedBench = hit.transform.GetComponent<Bench>();
             if (_selectedBench == null)
             {
+                Debug.Log("sa?");
                 return;
             }
             _selectedBench.OpenCraftMenu();
-            Debug.Log("_checkforBench?");
         }
     }
     private void PickItem()
@@ -57,13 +57,11 @@ public class Player : MonoBehaviour
                     activeBench.RecieveItem(slot.InventoryType, a.Collectable, out bool canDecrease);
                     if (canDecrease)
                     {
-                        slot.ItemAmount--;
-                        slot.UpdateItemAmount();
+                        slot.UpdateItemAmount(-1);
                         if (slot.ItemAmount <= 0)
                         {
                             slot.ResetSlot();
                         }
-                        activeBench.Create();
                     }
                 }
             }

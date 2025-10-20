@@ -85,9 +85,9 @@ public class Enemy : Spawnable
     {
         _entityPathFinder.LookRotationToTarget(moveDirection,.2f);
         Vector3 sa;
-        sa = _rb.velocity;
-        _rb.velocity = new Vector3(moveDirection.x, 0, moveDirection.z) * _speed;
-        _rb.velocity = new Vector3(_rb.velocity.x, sa.y, _rb.velocity.z);
+        sa = _rb.linearVelocity;
+        _rb.linearVelocity = new Vector3(moveDirection.x, 0, moveDirection.z) * _speed;
+        _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, sa.y, _rb.linearVelocity.z);
     }
 
 
@@ -126,7 +126,8 @@ public class Enemy : Spawnable
     {
         _rb.AddForce(dir * 100f, ForceMode.Impulse);
         Grandma.GetComponent<EntityHealth>().GetDamage(_attackDamage);
-        yield return new WaitForSeconds(1f);
+        _enemyStateMachine.ChangeState(EnemyStunned);
+        yield return new WaitForSeconds(0.8f);
         IsAttackOverload = false;
         AttackMovement = true;
     }

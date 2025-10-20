@@ -19,7 +19,6 @@ public class Collector : Tools
         _canAnim = false;
         _canUpdateMovement = true;
         base.StartUse();
-        Debug.Log("Trying to Collect");
         foreach (var a in ObjectToCheck)
         {
             Collectable source = a.transform.GetComponent<Collectable>();

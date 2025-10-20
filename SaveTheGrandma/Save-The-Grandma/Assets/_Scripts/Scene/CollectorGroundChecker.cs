@@ -11,12 +11,11 @@ public class CollectorGroundChecker : MonoBehaviour
         Transform objTransform = other.transform;
         if (other.gameObject.GetComponent<Collectable>() != null)
         {
-            other.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            other.gameObject.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
             other.gameObject.transform.position = new Vector3(objTransform.position.x, targetY, objTransform.position.z);
         }
         if(other.gameObject.TryGetComponent(out Enemy enemy))
         {
-            Debug.Log("sa?");
             enemy.HandleDeath();
         }
     }

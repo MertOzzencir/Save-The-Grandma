@@ -53,8 +53,7 @@ public class InventoryManager : MonoBehaviour
         }
         if (pickedSlot != null)
         {
-            pickedSlot.ItemAmount++;
-            pickedSlot.UpdateItemAmount();
+            pickedSlot.UpdateItemAmount(+1);
         }
         else
         {
@@ -64,8 +63,7 @@ public class InventoryManager : MonoBehaviour
                 {
                     a.ItemIcon.sprite = inventoryInformation.InventoryIcon;
                     a.ItemIcon.color = new Color(255, 255, 255, 1);
-                    a.ItemAmount++;
-                    a.UpdateItemAmount();
+                    a.UpdateItemAmount(+1);
                     a.InventoryType = inventoryInformation.InventoryType;
                     a.MaterialName.text = inventoryInformation.InventoryName;
                     a.MaterialName.fontSize = inventoryInformation.FontSize;

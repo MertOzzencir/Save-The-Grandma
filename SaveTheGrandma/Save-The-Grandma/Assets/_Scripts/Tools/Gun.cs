@@ -29,7 +29,7 @@ public class Gun : Tools
                     Quaternion lookRotation = Quaternion.LookRotation(slapDir);
                     transform.rotation = lookRotation;
                     Rigidbody enemyRB = a.GetComponent<Rigidbody>();
-                    enemyRB.velocity = Vector3.zero;
+                    enemyRB.linearVelocity = Vector3.zero;
                     enemyRB.AddForce(slapDir * _slapForce, ForceMode.Impulse);
                     a.StunnedDirection = transform.position;
                     a.Stunned();

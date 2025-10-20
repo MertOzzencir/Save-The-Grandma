@@ -17,6 +17,8 @@ public class BenchController : MonoBehaviour
 
     public void SetActiveBench(Bench bench)
     {
+        if (ActiveBench != null)
+            ActiveBench.OpenCraftMenu();
         ActiveBench = bench;
     }
     public void ResetActiveBench()
