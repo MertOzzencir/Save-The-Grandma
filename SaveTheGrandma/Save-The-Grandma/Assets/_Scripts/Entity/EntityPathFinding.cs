@@ -19,11 +19,12 @@ public class EntityPathFinding : MonoBehaviour
     {
         float x = Random.Range(PathSurface.bounds.min.x, PathSurface.bounds.max.x);
         float z = Random.Range(PathSurface.bounds.min.z, PathSurface.bounds.max.z);
-        Vector3 position = new Vector3(x, 0, z);
+        Vector3 position = new Vector3(x, PathSurface.bounds.max.y, z);
         ChoosedPosition = position;
     }
     public Vector3 GetChoosedPosition()
     {
+        Debug.Log("Choosed by " + transform.name + "Choosed Direction: " + ChoosedPosition);
         return ChoosedPosition;
     }
     public Vector3 MoveDirectionNormalized()

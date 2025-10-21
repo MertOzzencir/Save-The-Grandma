@@ -8,7 +8,6 @@ public class MotherSource : Spawnable
 {
 
     public SourceSO _sourceSO;
-    [SerializeField] private GameObject _groundShadow;
     public Transform DigPosition;
     private ChildSource[] _childMaterials;
     private List<ChildSource> _allChildInfo = new List<ChildSource>();
@@ -19,7 +18,6 @@ public class MotherSource : Spawnable
         _childMaterials = GetComponentsInChildren<ChildSource>();
         _totalChild = transform.childCount;
         GetChildrenInfo(_childMaterials);
-        _groundShadow.transform.parent = null;
     }
 
     public void GetChildrenInfo(ChildSource[] childTransform)
@@ -72,8 +70,6 @@ public class MotherSource : Spawnable
         if (_indexOfChildCount >= _totalChild)
         {
             isDead = true;
-            _groundShadow.SetActive(false);
-            _groundShadow.transform.parent = this.transform;
             DigPosition.parent = null;
             Destroy(DigPosition.gameObject, 2f);
             ResetSpawner();

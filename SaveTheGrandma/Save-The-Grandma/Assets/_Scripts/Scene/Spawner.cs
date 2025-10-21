@@ -16,7 +16,8 @@ public class Spawner : MonoBehaviour
     {
         foreach (var a in _spawnPoints)
         {
-            _spawnAvaliableArray.Add(a, new SpawnSpec(true, 0));
+            _spawnAvaliableArray.Add(a, new SpawnSpec(false, 0));
+            Spawn(a);
         }
     }
     void Update()

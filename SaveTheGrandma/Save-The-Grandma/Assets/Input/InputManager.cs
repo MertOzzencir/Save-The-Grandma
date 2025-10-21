@@ -22,13 +22,17 @@ public class InputManager : MonoBehaviour
         OnLeftMouse?.Invoke();
     }
 
-
-
-
+    public void SetActiveInputManager(bool condition)
+    {
+        if (condition)
+            _inputActions.Player.Enable();
+        else
+            _inputActions.Player.Disable();
+    }
     private void OnEnable()
     {
         _inputActions.Enable();
-        _inputActions.Player.LeftMouseButton.performed += LeftMouse;
+        _inputActions.MouseAction.LeftMouseButton.performed += LeftMouse;
         _inputActions.Player.Use.started += OnUseStarted;
         _inputActions.Player.Use.canceled += OnUseCanceled;
         _inputActions.Player.ToolPick.performed += ctx =>

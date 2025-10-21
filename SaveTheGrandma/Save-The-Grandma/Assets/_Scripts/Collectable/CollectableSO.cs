@@ -19,7 +19,8 @@ public enum InventoryType
     Iron,
     ChippedRock,
     Plank,
-    Nail
+    Nail,
+Building
 
 }
 [Serializable]

@@ -7,15 +7,6 @@
             "id": "690875a1-0e4b-4370-8253-88015246bf4d",
             "actions": [
                 {
-                    "name": "LeftMouseButton",
-                    "type": "Button",
-                    "id": "0ed2a046-9636-4b5d-a4d4-88d1888e90ee",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Use",
                     "type": "Button",
                     "id": "ae955399-6faf-43b0-b46c-37b46479edfa",
@@ -71,17 +62,6 @@
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "ad83da43-7e41-48a5-80b2-92528b84005a",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "LeftMouseButton",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "",
                     "id": "2bd02cd1-3f9a-4fec-9014-ebb4df186ecc",
@@ -222,6 +202,34 @@
                     "processors": "",
                     "groups": "",
                     "action": "MouseScrool",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "MouseAction",
+            "id": "3ddeb2e3-a6eb-45b1-ba08-cac2c075fe8a",
+            "actions": [
+                {
+                    "name": "LeftMouseButton",
+                    "type": "Button",
+                    "id": "5dfc1bbc-670d-46b2-a596-aa01cf6f3604",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "ca6ca187-2c7a-4dc8-9405-3edbc106b545",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LeftMouseButton",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

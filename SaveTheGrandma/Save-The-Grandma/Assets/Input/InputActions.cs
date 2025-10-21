@@ -93,15 +93,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             ""id"": ""690875a1-0e4b-4370-8253-88015246bf4d"",
             ""actions"": [
                 {
-                    ""name"": ""LeftMouseButton"",
-                    ""type"": ""Button"",
-                    ""id"": ""0ed2a046-9636-4b5d-a4d4-88d1888e90ee"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Use"",
                     ""type"": ""Button"",
                     ""id"": ""ae955399-6faf-43b0-b46c-37b46479edfa"",
@@ -157,17 +148,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""ad83da43-7e41-48a5-80b2-92528b84005a"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""LeftMouseButton"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": """",
                     ""id"": ""2bd02cd1-3f9a-4fec-9014-ebb4df186ecc"",
@@ -312,24 +292,55 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""MouseAction"",
+            ""id"": ""3ddeb2e3-a6eb-45b1-ba08-cac2c075fe8a"",
+            ""actions"": [
+                {
+                    ""name"": ""LeftMouseButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""5dfc1bbc-670d-46b2-a596-aa01cf6f3604"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""ca6ca187-2c7a-4dc8-9405-3edbc106b545"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftMouseButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_LeftMouseButton = m_Player.FindAction("LeftMouseButton", throwIfNotFound: true);
         m_Player_Use = m_Player.FindAction("Use", throwIfNotFound: true);
         m_Player_ToolPick = m_Player.FindAction("ToolPick", throwIfNotFound: true);
         m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
         m_Player_CloseTabs = m_Player.FindAction("CloseTabs", throwIfNotFound: true);
         m_Player_WASD = m_Player.FindAction("WASD", throwIfNotFound: true);
         m_Player_MouseScrool = m_Player.FindAction("MouseScrool", throwIfNotFound: true);
+        // MouseAction
+        m_MouseAction = asset.FindActionMap("MouseAction", throwIfNotFound: true);
+        m_MouseAction_LeftMouseButton = m_MouseAction.FindAction("LeftMouseButton", throwIfNotFound: true);
     }
 
     ~@InputActions()
     {
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, InputActions.Player.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_MouseAction.enabled, "This will cause a leak and performance issues, InputActions.MouseAction.Disable() has not been called.");
     }
 
     /// <summary>
@@ -405,7 +416,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     // Player
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
-    private readonly InputAction m_Player_LeftMouseButton;
     private readonly InputAction m_Player_Use;
     private readonly InputAction m_Player_ToolPick;
     private readonly InputAction m_Player_Inventory;
@@ -423,10 +433,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         /// Construct a new instance of the input action map wrapper class.
         /// </summary>
         public PlayerActions(@InputActions wrapper) { m_Wrapper = wrapper; }
-        /// <summary>
-        /// Provides access to the underlying input action "Player/LeftMouseButton".
-        /// </summary>
-        public InputAction @LeftMouseButton => m_Wrapper.m_Player_LeftMouseButton;
         /// <summary>
         /// Provides access to the underlying input action "Player/Use".
         /// </summary>
@@ -477,9 +483,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
-            @LeftMouseButton.started += instance.OnLeftMouseButton;
-            @LeftMouseButton.performed += instance.OnLeftMouseButton;
-            @LeftMouseButton.canceled += instance.OnLeftMouseButton;
             @Use.started += instance.OnUse;
             @Use.performed += instance.OnUse;
             @Use.canceled += instance.OnUse;
@@ -509,9 +512,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="PlayerActions" />
         private void UnregisterCallbacks(IPlayerActions instance)
         {
-            @LeftMouseButton.started -= instance.OnLeftMouseButton;
-            @LeftMouseButton.performed -= instance.OnLeftMouseButton;
-            @LeftMouseButton.canceled -= instance.OnLeftMouseButton;
             @Use.started -= instance.OnUse;
             @Use.performed -= instance.OnUse;
             @Use.canceled -= instance.OnUse;
@@ -563,6 +563,102 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="PlayerActions" /> instance referencing this action map.
     /// </summary>
     public PlayerActions @Player => new PlayerActions(this);
+
+    // MouseAction
+    private readonly InputActionMap m_MouseAction;
+    private List<IMouseActionActions> m_MouseActionActionsCallbackInterfaces = new List<IMouseActionActions>();
+    private readonly InputAction m_MouseAction_LeftMouseButton;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "MouseAction".
+    /// </summary>
+    public struct MouseActionActions
+    {
+        private @InputActions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public MouseActionActions(@InputActions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "MouseAction/LeftMouseButton".
+        /// </summary>
+        public InputAction @LeftMouseButton => m_Wrapper.m_MouseAction_LeftMouseButton;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_MouseAction; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="MouseActionActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(MouseActionActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="MouseActionActions" />
+        public void AddCallbacks(IMouseActionActions instance)
+        {
+            if (instance == null || m_Wrapper.m_MouseActionActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_MouseActionActionsCallbackInterfaces.Add(instance);
+            @LeftMouseButton.started += instance.OnLeftMouseButton;
+            @LeftMouseButton.performed += instance.OnLeftMouseButton;
+            @LeftMouseButton.canceled += instance.OnLeftMouseButton;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="MouseActionActions" />
+        private void UnregisterCallbacks(IMouseActionActions instance)
+        {
+            @LeftMouseButton.started -= instance.OnLeftMouseButton;
+            @LeftMouseButton.performed -= instance.OnLeftMouseButton;
+            @LeftMouseButton.canceled -= instance.OnLeftMouseButton;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="MouseActionActions.UnregisterCallbacks(IMouseActionActions)" />.
+        /// </summary>
+        /// <seealso cref="MouseActionActions.UnregisterCallbacks(IMouseActionActions)" />
+        public void RemoveCallbacks(IMouseActionActions instance)
+        {
+            if (m_Wrapper.m_MouseActionActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="MouseActionActions.AddCallbacks(IMouseActionActions)" />
+        /// <seealso cref="MouseActionActions.RemoveCallbacks(IMouseActionActions)" />
+        /// <seealso cref="MouseActionActions.UnregisterCallbacks(IMouseActionActions)" />
+        public void SetCallbacks(IMouseActionActions instance)
+        {
+            foreach (var item in m_Wrapper.m_MouseActionActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_MouseActionActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="MouseActionActions" /> instance referencing this action map.
+    /// </summary>
+    public MouseActionActions @MouseAction => new MouseActionActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Player" which allows adding and removing callbacks.
     /// </summary>
@@ -570,13 +666,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     /// <seealso cref="PlayerActions.RemoveCallbacks(IPlayerActions)" />
     public interface IPlayerActions
     {
-        /// <summary>
-        /// Method invoked when associated input action "LeftMouseButton" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnLeftMouseButton(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Use" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
@@ -619,5 +708,20 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnMouseScrool(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "MouseAction" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="MouseActionActions.AddCallbacks(IMouseActionActions)" />
+    /// <seealso cref="MouseActionActions.RemoveCallbacks(IMouseActionActions)" />
+    public interface IMouseActionActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "LeftMouseButton" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnLeftMouseButton(InputAction.CallbackContext context);
     }
 }

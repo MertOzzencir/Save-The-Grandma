@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f2c835ddfa998b428dc73af2dce92d6, type: 3}
+  m_Name: Top
+  m_EditorClassIdentifier: Assembly-CSharp::CraftableSO
+  InventoryInformation:
+    InventoryType: 7
+    InventoryIcon: {fileID: 21300000, guid: 4e93371515d686140a46feefcb709117, type: 3}
+    ToolCanGather: 3
+    InventoryName: Bridge Top
+    FontSize: 22
+  _recipes:
+  - Collectable: {fileID: 155772438679451981, guid: d7a492ca81097884a8772c16f8eb5540,
+      type: 3}
+    Amount: 1
+  - Collectable: {fileID: 6659128302832555500, guid: 72c39753a909fff4d8d366e35b3ae589,
+      type: 3}
+    Amount: 1
+  Prefab: {fileID: 0}

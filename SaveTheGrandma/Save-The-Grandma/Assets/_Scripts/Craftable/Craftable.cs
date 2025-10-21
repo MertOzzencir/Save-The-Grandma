@@ -9,7 +9,6 @@ public class Craftable : Collectable
     public override void Start()
     {
         ToolType = SOData.InventoryInformation.ToolCanGather;
-        SetIdleAnimation();
     }
     public override void Collect(ToolType toolType)
     {
