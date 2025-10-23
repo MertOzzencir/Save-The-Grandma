@@ -16,8 +16,9 @@ public class EnemyMove : EnemyState
     {
         base.Enter();
         EnemyAnim.SetBool("canMove", true);
-        _pathFinder.ChooseMovePosition();
+        _pathFinder.ChooseMovePosition(PathColliderManager.PathSurface);
         _moveDirection = _pathFinder.MoveDirectionNormalized();
+        _pathFinder.MoveToDestination(_pathFinder.GetChoosedPosition());
     }
     public override void Exit()
     {
@@ -29,11 +30,6 @@ public class EnemyMove : EnemyState
         if (Enemy.Grandma != null)
             StateMachine.ChangeState(Enemy.EnemyGrandmaChase);
 
-        Enemy.MoveDistanceCheck(Enemy.transform,_pathFinder.GetChoosedPosition(), Enemy.EnemyPatrol,7f);
+        Enemy.MoveDistanceCheck(Enemy.transform, _pathFinder.GetChoosedPosition(), Enemy.EnemyPatrol, 7f);
     }
-    public override void FixedUpdate()
-    {
-        Enemy.Move(_moveDirection);
-    }
-
 }

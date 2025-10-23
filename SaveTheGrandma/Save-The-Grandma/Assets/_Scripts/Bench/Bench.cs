@@ -26,7 +26,6 @@ public class Bench : MonoBehaviour
     private bool _duringCraft;
     private float _uiCraftTimer;
     public bool OpenMenu;
-    private int _craftArrayIndex;
     private Collectable[] _refCollectables = new Collectable[2];
     private int[] _refAmount = new int[2];
     private InventoryManager _inventory;
@@ -38,7 +37,7 @@ public class Bench : MonoBehaviour
         _craftUISlider.maxValue = _craftTimer;
         _audioManager = GetComponent<EntityAudioManager>();
         _toolManager = FindAnyObjectByType<ToolUseManager>();
-        SetCraftItem(_craftArrayIndex);
+        SetCraftItem(AllCraftables[0]);
         _inventory = FindAnyObjectByType<InventoryManager>();
         _anim = GetComponentInChildren<Animator>();
         _anim.GetComponent<AnimationEventHandler>().OnAnimEventFire += CraftClip;
@@ -93,7 +92,6 @@ public class Bench : MonoBehaviour
 
 
         _audioManager.VolumeSet(1f);
-        Debug.Log("as");
         OpenMenu = !OpenMenu;
         if (OpenMenu)
         {
@@ -116,52 +114,33 @@ public class Bench : MonoBehaviour
 
     }
 
-    public void SetCraftItem(int index)
+    public void SetCraftItem(Craftable nextCraftable)
     {
-        ActiveCraftItem = AllCraftables[index];
-        _mainCraftIcon.sprite = AllCraftables[index].SOData.InventoryInformation.InventoryIcon;
-        _craftMaterialName.text = AllCraftables[index].SOData.InventoryInformation.InventoryName;
-        SetCraftItemReq(index);
+        ActiveCraftItem = nextCraftable;
+        _mainCraftIcon.sprite = ActiveCraftItem.SOData.InventoryInformation.InventoryIcon;
+        _craftMaterialName.text = ActiveCraftItem.SOData.InventoryInformation.InventoryName;
+        SetCraftItemReq(nextCraftable);
     }
-    private void SetCraftItemReq(int index)
+    private void SetCraftItemReq(Craftable nextCraftable)
     {
         ResetCraftItem();
-        if (AllCraftables[index].SOData._recipes.Count == 1)
+        for(int i = 0; i < nextCraftable.SOData._recipes.Count; i++)
         {
-            _refCollectables[0] = AllCraftables[index].SOData._recipes[0].Collectable;
-            _materialReq[0].sprite = _refCollectables[0]._collectableData.InventoryInformation.InventoryIcon;
-            _materialReq[0].color = new Color(255, 255, 255, 1);
-            _materialReq[1].color = new Color(255, 255, 255, 0);
-            _refAmount[0] = AllCraftables[index].SOData._recipes[0].Amount;
-            _materialAmountText[0].text = _refAmount[0].ToString();
-            _materialNameText[0].text = AllCraftables[index].SOData._recipes[0].Collectable._collectableData.InventoryInformation.InventoryName;
+            _refCollectables[i] =nextCraftable.SOData._recipes[i].Collectable;
+            _materialReq[i].sprite = _refCollectables[i]._collectableData.InventoryInformation.InventoryIcon;
+            _materialReq[i].color = new Color(255, 255, 255, 1);
+            _refAmount[i] = nextCraftable.SOData._recipes[0].Amount;
+            _materialAmountText[i].text = _refAmount[i].ToString();
+            _materialNameText[i].text = nextCraftable.SOData._recipes[0].Collectable._collectableData.InventoryInformation.InventoryName;
         }
-        else
-        {
-            _refCollectables[0] = AllCraftables[index].SOData._recipes[0].Collectable;
-            _materialReq[0].sprite = _refCollectables[0]._collectableData.InventoryInformation.InventoryIcon;
-            _materialReq[0].color = new Color(255, 255, 255, 1);
-            _refAmount[0] = AllCraftables[index].SOData._recipes[0].Amount;
-            _materialAmountText[0].text = _refAmount[0].ToString();
-            _materialNameText[0].text = AllCraftables[index].SOData._recipes[0].Collectable._collectableData.InventoryInformation.InventoryName;
-
-            _refCollectables[1] = AllCraftables[index].SOData._recipes[1].Collectable;
-            _materialReq[1].sprite = _refCollectables[1]._collectableData.InventoryInformation.InventoryIcon;
-            _materialReq[1].color = new Color(255, 255, 255, 1);
-            _refAmount[1] = AllCraftables[index].SOData._recipes[1].Amount;
-            _materialAmountText[1].text = _refAmount[1].ToString();
-            _materialNameText[1].text = AllCraftables[index].SOData._recipes[1].Collectable._collectableData.InventoryInformation.InventoryName;
-        }
-
     }
     public void RecieveItem(InventoryType slotType, Collectable fixedCollectable, out bool materialDecrease)
     {
+        materialDecrease = false;
         if (_duringCraft)
         {
-            materialDecrease = false;
             return;
         }
-        materialDecrease = false;
         for (int i = 0; i < _refCollectables.Length; i++)
         {
             if (_refCollectables[i] == fixedCollectable)
@@ -185,18 +164,17 @@ public class Bench : MonoBehaviour
 
     }
 
-    public bool CanCraft()
+    public bool CanCreate()
     {
         if (_refAmount[0] <= 0 && _refAmount[1] <= 0)
         {
-            SetCraftItem(_craftArrayIndex);
             return true;
         }
         return false;
     }
     public virtual void Create()
     {
-        if (CanCraft())
+        if (CanCreate())
         {
             StartCoroutine(CreateCoolDown());
         }
@@ -220,20 +198,27 @@ public class Bench : MonoBehaviour
         _duringCraft = false;
         _craftUISlider.gameObject.SetActive(false);
         _anim.SetBool("canCraft", false);
+        SetCraftItem(ActiveCraftItem);
 
     }
     public void ChangeCraftSelection(int Amount)
     {
         if (_duringCraft)
             return;
-        _craftArrayIndex += Amount;
+        int nextIndex = AllCraftables.IndexOf(ActiveCraftItem) + Amount;
+        if (nextIndex >= AllCraftables.Count)
+        {
+            nextIndex = 0;
+        } 
+        if(nextIndex < 0)
+        {
+            nextIndex = AllCraftables.Count - 1;            
+        }
+
+        Craftable nextItem = AllCraftables[nextIndex];
         _outputIcon.sprite = null;
         _outputIcon.color = new Color(255, 255, 255, 0);
-        if (_craftArrayIndex >= AllCraftables.Count)
-            _craftArrayIndex = 0;
-
-        if (_craftArrayIndex < 0)
-            _craftArrayIndex = AllCraftables.Count - 1;
+      
         
         for(int i = 0; i < 2; i++)
         {
@@ -246,12 +231,13 @@ public class Bench : MonoBehaviour
             }
         }
 
-        SetCraftItem(_craftArrayIndex);
+        SetCraftItem(nextItem);
     }
     private void ResetCraftItem()
     {
         for (int i = 0; i < 2; i++)
         {
+            _materialReq[i].color = new Color(255, 255, 255, 0);
             _sendBackCollectables[i] = 0;
             _materialReq[i].sprite = null;
             _materialAmountText[i].text = "";

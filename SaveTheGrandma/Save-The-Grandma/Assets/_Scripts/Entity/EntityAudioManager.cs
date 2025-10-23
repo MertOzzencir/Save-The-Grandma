@@ -33,7 +33,7 @@ public class EntityAudioManager : MonoBehaviour
     }
     public void SetRandomPitch()
     {
-        float randomPitch = Random.Range(.5f, 1.2f);
+        float randomPitch = Random.Range(.85f, 1.2f);
         _aS.pitch = randomPitch;
     }
 }

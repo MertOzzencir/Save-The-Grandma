@@ -31,7 +31,6 @@ public class ItemSlot : MonoBehaviour
         bool isPositive = Amount > 0 ? true : false;
         if (gameObject.activeInHierarchy)
         {
-            Debug.Log(gameObject.activeSelf);
             OnAmountChange?.Invoke(isPositive,BackGround);
         }
     }

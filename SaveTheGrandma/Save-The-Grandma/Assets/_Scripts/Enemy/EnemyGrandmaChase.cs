@@ -14,35 +14,36 @@ public class EnemyGrandmaChase : EnemyState
     public override void Enter()
     {
         base.Enter();
+        Enemy.Grandma.RunFromEnemy();
         _indicator.RestartIndicator();
         _target = Enemy.Grandma;
         Enemy.AttackMovement = true;
     }
     public override void Exit()
     {
+        Enemy.Grandma.SlowDown();
     }
     public override void Update()
     {
         if (Enemy.Grandma == null)
             return;
 
-        dir = (_target.transform.position - Enemy.transform.position).normalized;
         if (Vector3.Distance(Enemy.transform.position, _target.transform.position) < 7.5f)
         {
             if (!Enemy.IsAttackOverload)
             {
+                Vector3 dir = (_target.transform.position - Enemy.transform.position).normalized;
                 Enemy.AttackMovement = false;
                 Enemy.IsAttackOverload = true;
-                Enemy.StartCoroutine(Enemy.AttackToGrandma(dir));
+                Enemy.StartAttackToGrandma(dir);
             }
         }
     }
-    private Vector3 dir;
     public override void FixedUpdate()
     {
-        if (Enemy.AttackMovement)
+        if (Enemy.AttackMovement && Enemy.Grandma != null)
         {
-            Enemy.Move(dir);
+            _pathFinder.MoveToDestination(Enemy.Grandma.transform.position);
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Gun : Tools
@@ -25,14 +26,8 @@ public class Gun : Tools
             case 1:
                 foreach (var a in _currentEnemy)
                 {
-                    Vector3 slapDir = (a.transform.position - transform.position).normalized;
-                    Quaternion lookRotation = Quaternion.LookRotation(slapDir);
-                    transform.rotation = lookRotation;
-                    Rigidbody enemyRB = a.GetComponent<Rigidbody>();
-                    enemyRB.linearVelocity = Vector3.zero;
-                    enemyRB.AddForce(slapDir * _slapForce, ForceMode.Impulse);
-                    a.StunnedDirection = transform.position;
                     a.Stunned();
+                    StartCoroutine(AttackNextFrame(a));
 
                 }
                 _anim.SetBool("useTool", false);
@@ -42,6 +37,18 @@ public class Gun : Tools
         }
 
 
+    }
+
+    IEnumerator AttackNextFrame(Enemy a)
+    {
+        yield return new WaitForFixedUpdate();
+        Vector3 slapDir = (a.transform.position - transform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(slapDir);
+        transform.rotation = lookRotation;
+        Rigidbody enemyRB = a.GetComponent<Rigidbody>();
+        enemyRB.linearVelocity = Vector3.zero;
+        enemyRB.AddForce(slapDir * _slapForce, ForceMode.Impulse);
+        a.StunnedDirection = transform.position;
     }
 
     public override void StartUse()

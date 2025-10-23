@@ -3,7 +3,6 @@ using UnityEngine;
 [RequireComponent(typeof(EntityPathFinding))]
 public class Grandma : MonoBehaviour
 {
-    [SerializeField] private float _speed;
     private Rigidbody _rb;
     private bool _canMove;
     private EntityPathFinding _pathFindging;
@@ -11,6 +10,7 @@ public class Grandma : MonoBehaviour
     {
         _pathFindging = GetComponent<EntityPathFinding>();
         _rb = GetComponent<Rigidbody>();
+        _pathFindging.ChooseMovePosition(PathColliderManager.PathSurface);
     }
 
 
@@ -18,24 +18,26 @@ public class Grandma : MonoBehaviour
     {
         if (!_canMove)
         {
-            _pathFindging.ChooseMovePosition();
+            _pathFindging.MoveToDestination(_pathFindging.GetChoosedPosition());
             _canMove = true;
         }
-        if (Vector3.Distance(transform.position, _pathFindging.GetChoosedPosition()) < 8f)
+        if (Vector3.Distance(transform.position, _pathFindging.GetChoosedPosition()) < 6f)
         {
+            _pathFindging.ChooseMovePosition(PathColliderManager.PathSurface);
             _canMove = false;
         }
 
     }
 
-    void FixedUpdate()
+    public void RunFromEnemy()
     {
-        if (_canMove)
-        {
-            _pathFindging.LookRotationToTarget(_pathFindging.MoveDirectionNormalized(),0.5f);
-            _rb.linearVelocity = new Vector3(_pathFindging.MoveDirectionNormalized().x, 0, _pathFindging.MoveDirectionNormalized().z) * _speed + new Vector3(0, _rb.linearVelocity.y, 0);
-        }
-
+        _pathFindging.Agent.speed = _pathFindging.EntitySpeed * 1.75f;
+        _pathFindging.ChooseMovePosition(PathColliderManager.PathSurface);
+        _pathFindging.MoveToDestination(_pathFindging.GetChoosedPosition());
+    }
+    public void SlowDown()
+    {
+        _pathFindging.Agent.speed = _pathFindging.EntitySpeed;
     }
 
 

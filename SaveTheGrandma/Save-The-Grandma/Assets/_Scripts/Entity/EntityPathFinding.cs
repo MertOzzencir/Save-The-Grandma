@@ -1,30 +1,37 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EntityPathFinding : MonoBehaviour
 {
-    public Collider PathSurface{ get; set; }
+    public float EntitySpeed;
 
     public Vector3 ChoosedPosition { get; set; }
-
+    public NavMeshAgent Agent{ get; set; }
     void Awake()
     {
-        var ground = GameObject.FindGameObjectWithTag("Ground");
-        if (ground != null)
-        {
-            PathSurface = ground.GetComponent<Collider>();
-        }
-
+        Agent = GetComponent<NavMeshAgent>();
     }
-    public void ChooseMovePosition()
+    void Start()
     {
-        float x = Random.Range(PathSurface.bounds.min.x, PathSurface.bounds.max.x);
-        float z = Random.Range(PathSurface.bounds.min.z, PathSurface.bounds.max.z);
-        Vector3 position = new Vector3(x, PathSurface.bounds.max.y, z);
+        Agent.speed = EntitySpeed;
+    }
+
+    public void ChooseMovePosition(Collider PathSurfaceCollider)
+    {
+        float x = Random.Range(PathSurfaceCollider.bounds.min.x  , PathSurfaceCollider.bounds.max.x );
+        float z = Random.Range(PathSurfaceCollider.bounds.min.z  , PathSurfaceCollider.bounds.max.z );
+        Vector3 position = new Vector3(x, transform.position.y, z);
         ChoosedPosition = position;
+    }
+    public void MoveToDestination(Vector3 position)
+    {
+        if (Agent.isOnNavMesh)
+        {
+            Agent.SetDestination(position);
+        }
     }
     public Vector3 GetChoosedPosition()
     {
-        Debug.Log("Choosed by " + transform.name + "Choosed Direction: " + ChoosedPosition);
         return ChoosedPosition;
     }
     public Vector3 MoveDirectionNormalized()
@@ -32,11 +39,12 @@ public class EntityPathFinding : MonoBehaviour
 
         return (ChoosedPosition - transform.position).normalized;
     }
-    
-    public void LookRotationToTarget(Vector3 lookDirection,float percent)
+
+    public void LookRotationToTarget(Vector3 lookDirection, float percent)
     {
         Quaternion lookRotation = Quaternion.LookRotation(lookDirection);
         transform.rotation = Quaternion.Lerp(transform.rotation, lookRotation, percent);
-        transform.eulerAngles = new Vector3(0,transform.eulerAngles.y,transform.eulerAngles.z);
+        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, transform.eulerAngles.z);
     }
+   
 }

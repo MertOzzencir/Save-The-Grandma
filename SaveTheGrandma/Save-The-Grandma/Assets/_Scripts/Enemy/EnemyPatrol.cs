@@ -1,23 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyPatrol : EnemyState
 {
+    private EntityPathFinding _pathfinder;
     private LayerMask _collectableMask;
     private float _repeatStateTimer;
     private float _checkRadius;
     private Collider[] _collectables;
     private Collectable _goalToCollect;
-    private Vector3 _moveDirection;
+    private Vector3 _movePosition;
     private int _timer;
     private bool _canTurn;
-    public EnemyPatrol(StateMachine stateMachine, Enemy enemy, Animator animator,Sprite stateIcon,EntityIndicatorHandler indicatorManager, LayerMask collectableMask, float repeatTimer, float checkRadius) : base(stateMachine, enemy, animator,stateIcon,indicatorManager)
+    public EnemyPatrol(StateMachine stateMachine, Enemy enemy, Animator animator,Sprite stateIcon,EntityIndicatorHandler indicatorManager, LayerMask collectableMask, float repeatTimer, float checkRadius,EntityPathFinding pathfinder) : base(stateMachine, enemy, animator,stateIcon,indicatorManager)
     {
         _collectableMask = collectableMask;
         _repeatStateTimer = repeatTimer;
         _checkRadius = checkRadius;
+        _pathfinder = pathfinder;
     }
 
     public override void Enter()
@@ -31,11 +34,13 @@ public class EnemyPatrol : EnemyState
         _collectables = Physics.OverlapSphere(Enemy.transform.position, _checkRadius, _collectableMask);
         foreach (var a in _collectables)
         {
-            _moveDirection = (a.transform.position - Enemy.transform.position).normalized;
-            float isItInArea = Vector3.Dot(_moveDirection, Enemy.transform.forward);
+            Vector3 _tempMovePos = (a.transform.position - Enemy.transform.position).normalized;
+            float isItInArea = Vector3.Dot(_tempMovePos, Enemy.transform.forward);
             if (isItInArea > 0.5f)
             {
                 Enemy.CurrentEatTarget = a.GetComponent<Collectable>();
+                _movePosition = a.transform.position;
+                _pathfinder.MoveToDestination(_movePosition);
                 break;
             }
         }
@@ -68,7 +73,7 @@ public class EnemyPatrol : EnemyState
                 if (_canTurn)
                 {
                     _canTurn = false;
-                    Enemy.StartCoroutine(Enemy.TurnEnemy(Enemy.transform.GetComponent<Rigidbody>()));
+                    StateMachine.ChangeState(Enemy.EnemyPatrolTurning);
                 }
             }
             else
@@ -78,14 +83,4 @@ public class EnemyPatrol : EnemyState
             }
         }
     }
-    public override void FixedUpdate()
-    {
-        if (Enemy.CurrentEatTarget != null)
-        {
-            Enemy.Move(_moveDirection);
-        }
-
-    }
-
-
 }

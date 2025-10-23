@@ -10,13 +10,17 @@ public class InventoryManager : MonoBehaviour
     public static InventoryManager Instance;
     [SerializeField] private ItemSlot[] _slots;
     [SerializeField] private GameObject _inventory;
+    [SerializeField] private GameObject _inventoryVisual;
 
     public bool CanOpenInventory;
+    private Vector3 _localScale;
     void Start()
     {
         Instance = this;
         InputManager.OnTab += OpenInventory;
         InputManager.OnClose += CloseEsc;
+        _localScale = _inventoryVisual.transform.localScale;
+        _inventoryVisual.transform.localScale = Vector3.zero;
     }
 
     private void CloseEsc()
@@ -29,10 +33,12 @@ public class InventoryManager : MonoBehaviour
     {
         if (!CanOpenInventory)
         {
+            TweenManager.ScaleObject(_inventoryVisual.transform, _localScale, .1f,DG.Tweening.Ease.OutElastic);
             CanOpenInventory = true;
             _inventory.SetActive(CanOpenInventory);
         }
         else {
+            TweenManager.ScaleObject(_inventoryVisual.transform, Vector3.zero, 0.1f,DG.Tweening.Ease.OutElastic);
             CanOpenInventory = false;
             _inventory.SetActive(CanOpenInventory);
         }
