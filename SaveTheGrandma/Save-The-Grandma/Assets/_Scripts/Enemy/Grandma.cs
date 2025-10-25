@@ -37,7 +37,8 @@ public class Grandma : MonoBehaviour
     }
     public void SlowDown()
     {
-        _pathFindging.Agent.speed = _pathFindging.EntitySpeed;
+        if(gameObject != null)
+            _pathFindging.Agent.speed = _pathFindging.EntitySpeed;
     }
 
 

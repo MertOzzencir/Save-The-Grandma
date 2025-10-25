@@ -31,5 +31,13 @@ public class EntityIndicatorHandler : MonoBehaviour
     {
         _stateIconGameObject.sprite = sprite;
     }
+    public void SetLastIndicatorColorToFinishColor()
+    {
+        MeshRenderer[] mR = _lastIndicator.GetComponentsInChildren<MeshRenderer>();
+        foreach(var a in mR)
+        {
+            a.material.color = Color.red;
+        }
+    }
 
 }

@@ -2071,7 +2071,7 @@ MonoBehaviour:
     FieldOfView: 55
     OrthographicSize: 28.99993
     NearClipPlane: 2
-    FarClipPlane: 300
+    FarClipPlane: 1500
     Dutch: 0
     ModeOverride: 0
     PhysicalProperties:
@@ -2799,7 +2799,7 @@ Transform:
   m_GameObject: {fileID: 408511558}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.14145294, z: -0, w: 0.989945}
-  m_LocalPosition: {x: 35.7, y: -34.8, z: -15.7}
+  m_LocalPosition: {x: 35.7, y: -12.4, z: -15.7}
   m_LocalScale: {x: 11.8083, y: 13.4952, z: 24.460052}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6949,7 +6949,7 @@ GameObject:
   - component: {fileID: 954266428}
   m_Layer: 14
   m_Name: Water
-  m_TagString: Untagged
+  m_TagString: Water
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -11767,7 +11767,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 2
-  far clip plane: 300
+  far clip plane: 1500
   field of view: 55
   orthographic: 0
   orthographic size: 28.99993
@@ -12883,6 +12883,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4194307422017929210, guid: 65d56e18a9eb05148aa833875ccc21fe,
     type: 3}
   m_PrefabInstance: {fileID: 7342315914944250542}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1681162043 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6578822163277937226, guid: 7dfc035554197f84fa52130bbb87e01f,
+    type: 3}
+  m_PrefabInstance: {fileID: 1839659580}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1688491560
 GameObject:
@@ -14304,6 +14310,11 @@ PrefabInstance:
       propertyPath: _spawnPoints.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1168538338357567763, guid: 7dfc035554197f84fa52130bbb87e01f,
+        type: 3}
+      propertyPath: '_spawnPoints.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1681162043}
     - target: {fileID: 1920498168637258112, guid: 7dfc035554197f84fa52130bbb87e01f,
         type: 3}
       propertyPath: m_LocalPosition.x

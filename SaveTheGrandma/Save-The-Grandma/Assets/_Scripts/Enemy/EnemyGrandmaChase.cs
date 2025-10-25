@@ -14,19 +14,24 @@ public class EnemyGrandmaChase : EnemyState
     public override void Enter()
     {
         base.Enter();
-        Enemy.Grandma.RunFromEnemy();
+        if(Enemy.Grandma != null)
+            Enemy.Grandma.RunFromEnemy();
         _indicator.RestartIndicator();
         _target = Enemy.Grandma;
         Enemy.AttackMovement = true;
     }
     public override void Exit()
     {
-        Enemy.Grandma.SlowDown();
+        if(Enemy.Grandma != null)
+            Enemy.Grandma.SlowDown();
     }
     public override void Update()
     {
         if (Enemy.Grandma == null)
+        {
+            StateMachine.ChangeState(Enemy.EnemyIdle);
             return;
+        }
 
         if (Vector3.Distance(Enemy.transform.position, _target.transform.position) < 7.5f)
         {

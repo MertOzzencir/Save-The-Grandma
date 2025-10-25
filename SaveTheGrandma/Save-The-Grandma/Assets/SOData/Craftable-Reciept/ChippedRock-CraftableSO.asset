@@ -12,17 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f2c835ddfa998b428dc73af2dce92d6, type: 3}
   m_Name: ChippedRock-CraftableSO
   m_EditorClassIdentifier: 
-  _recipes:
-  - Collectable: {fileID: -1075227148669449564, guid: 2d48cfc8e56a1544787e7326673ed848,
-      type: 3}
-    Amount: 5
-  - Collectable: {fileID: 6659128302832555500, guid: 72c39753a909fff4d8d366e35b3ae589,
-      type: 3}
-    Amount: 2
-  Prefab: {fileID: 5702620640839305611, guid: ee91dcfbfb29e4c4b8c5676f5fc3194d, type: 3}
   InventoryInformation:
     InventoryType: 4
     InventoryIcon: {fileID: 21300000, guid: 66a8bf5b719e5844ba8b71a8fb2f28ca, type: 3}
     ToolCanGather: 3
     InventoryName: Chipped Rock
     FontSize: 20
+  _recipes:
+  - Collectable: {fileID: -1075227148669449564, guid: 2d48cfc8e56a1544787e7326673ed848,
+      type: 3}
+    Amount: 5
+  Prefab: {fileID: 5702620640839305611, guid: ee91dcfbfb29e4c4b8c5676f5fc3194d, type: 3}

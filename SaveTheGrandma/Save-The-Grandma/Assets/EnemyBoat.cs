@@ -9,7 +9,7 @@ public class EnemyBoat : Spawnable
     private EntityPathFinding _pathFinder;
     private IslandBoatPort _currentPortToTransfer;
     private bool _canTransport;
-    private float _timer;
+    private bool _canChooseRandomPosition;
     private void Awake()
     {
         _pathFinder = GetComponent<EntityPathFinding>();
@@ -18,6 +18,8 @@ public class EnemyBoat : Spawnable
 
     void Start()
     {
+        Water = GameObject.FindGameObjectWithTag("Water").GetComponent<Collider>();
+        _canChooseRandomPosition = true;
         FindPort();
     }
 
@@ -27,7 +29,7 @@ public class EnemyBoat : Spawnable
         {
             if (_canTransport)
             {
-                if (Vector3.Distance(transform.position, _currentPortToTransfer.transform.position) < 9f)
+                if (Vector3.Distance(transform.position, _currentPortToTransfer.transform.position) < 20f)
                 {
                     StartCoroutine(SpawnEnemyOnIsland());
                 }
@@ -39,7 +41,20 @@ public class EnemyBoat : Spawnable
         }
         else
         {
-          
+            FindPort();
+            if (_canChooseRandomPosition && _canTransport)
+            {
+                _pathFinder.ChooseMovePosition(Water);
+                _pathFinder.MoveToDestination(_pathFinder.GetChoosedPosition());
+                _canChooseRandomPosition = false;
+            }
+            else
+            {
+                if (Vector3.Distance(transform.position, _pathFinder.GetChoosedPosition()) < 20f)
+                {
+                    _canChooseRandomPosition = true;
+                }
+            }
         }
 
     }
@@ -68,8 +83,12 @@ public class EnemyBoat : Spawnable
         yield return null;
         foreach (var a in _enemyPrefab)
         {
-            _currentPortToTransfer.CarryEnemyToIsland(a);
-            yield return new WaitForSeconds(1f);
+            if (_currentPortToTransfer != null)
+            {
+                _currentPortToTransfer.CarryEnemyAnimation();
+                yield return new WaitForSeconds(1f);
+                _currentPortToTransfer.CarryEnemyToIsland(a);
+            }
         }
         _pathFinder.Agent.enabled = true;
         _pathFinder.MoveToDestination(SpawnOwner.transform.position);

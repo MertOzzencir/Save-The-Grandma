@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -50,9 +51,9 @@ public class ChildSource : MonoBehaviour
         private IEnumerator HandleAnimation(ChildSource obj, float delayTime, Vector3 animationScale)
     {
         Vector3 originalScale = obj.transform.localScale;
-        obj.transform.localScale = animationScale;
-        yield return new WaitForSeconds(delayTime);
-        obj.transform.localScale = originalScale;
+        TweenManager.ScaleObject(this.transform, animationScale,delayTime/4 , Ease.OutBack);
+        yield return new WaitForSeconds(delayTime/4);
+        TweenManager.ScaleObject(this.transform, originalScale, delayTime, Ease.OutBack);
     }
 
   

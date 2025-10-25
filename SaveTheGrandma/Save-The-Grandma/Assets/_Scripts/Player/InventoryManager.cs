@@ -33,7 +33,7 @@ public class InventoryManager : MonoBehaviour
     {
         if (!CanOpenInventory)
         {
-            TweenManager.ScaleObject(_inventoryVisual.transform, _localScale, .1f,DG.Tweening.Ease.OutElastic);
+            TweenManager.ScaleObject(_inventoryVisual.transform, _localScale, .2f,DG.Tweening.Ease.OutBack);
             CanOpenInventory = true;
             _inventory.SetActive(CanOpenInventory);
         }

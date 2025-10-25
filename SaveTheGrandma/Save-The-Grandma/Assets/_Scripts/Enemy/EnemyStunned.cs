@@ -38,7 +38,7 @@ public class EnemyStunned : EnemyState
             _pathfinder.Agent.ResetPath();
         
         _timer += Time.deltaTime;
-        if(_timer > 2f)
+        if(_timer > 3f)
         {
             StateMachine.ChangeState(Enemy.EnemyPatrol);
         }

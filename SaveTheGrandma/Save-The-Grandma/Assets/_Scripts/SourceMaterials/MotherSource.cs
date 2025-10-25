@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SocialPlatforms;
 
 public class MotherSource : Spawnable
 {
-
+    [SerializeField] private ParticleSystem _digEffect;
     public SourceSO _sourceSO;
     public Transform DigPosition;
     private ChildSource[] _childMaterials;
@@ -15,9 +17,15 @@ public class MotherSource : Spawnable
     private int _indexOfChildCount = 0;
      void Awake()
     {
+        float localScaleMultipier = UnityEngine.Random.Range(1, 1.5f);
+        float animationDuration = UnityEngine.Random.Range(.5f, 1f);
+        transform.localScale = transform.localScale * localScaleMultipier;
         _childMaterials = GetComponentsInChildren<ChildSource>();
         _totalChild = transform.childCount;
         GetChildrenInfo(_childMaterials);
+        Vector3 localScale = transform.localScale;
+        transform.localScale = Vector3.zero;//new Vector3(0.1f,0.1f,0.1f);
+        TweenManager.ScaleObject(transform, localScale, animationDuration, DG.Tweening.Ease.OutBack);
     }
 
     public void GetChildrenInfo(ChildSource[] childTransform)
@@ -41,7 +49,8 @@ public class MotherSource : Spawnable
 
         if (_recievedToolType != _sourceSO.AToolCanDig)
             return;
-
+        _digEffect.gameObject.SetActive(true);
+        _digEffect.Play();
         ChildSource refChild = _allChildInfo.FirstOrDefault(value => value._childIndex == _indexOfChildCount);
         if (refChild != null)
         {

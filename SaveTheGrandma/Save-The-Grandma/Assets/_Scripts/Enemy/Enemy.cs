@@ -114,7 +114,7 @@ public class Enemy : MonoBehaviour
         _rb.AddForce(dir * 150f, ForceMode.Impulse);
         Grandma.GetComponent<EntityHealth>().GetDamage(_attackDamage);
         _enemyStateMachine.ChangeState(EnemyStunned);
-        yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(1.5f);
         _entityPathFinder.Agent.enabled = true;
         _rb.isKinematic = true;
         _rb.useGravity = false;
@@ -123,7 +123,9 @@ public class Enemy : MonoBehaviour
     }
     public void DestroyEatObject()
     {
-        Destroy(CurrentEatTarget.gameObject);
+        Transform eatMaterial = CurrentEatTarget.transform;
+        TweenManager.ScaleObject(eatMaterial, eatMaterial.localScale * 1.3f, .5f, DG.Tweening.Ease.OutCirc);
+        Destroy(CurrentEatTarget.gameObject,.51f);
     }
     public void Stunned()
     {

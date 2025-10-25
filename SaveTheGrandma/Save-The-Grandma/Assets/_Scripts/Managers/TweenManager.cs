@@ -5,7 +5,7 @@ public class TweenManager : MonoBehaviour
 
     public static void ScaleObject(Transform obj, Vector3 scaleAmount, float duration, Ease animationType)
     {
-        obj.DOScale(scaleAmount, duration).SetEase(Ease.Flash);
+        obj.DOScale(scaleAmount, duration).SetEase(animationType);
     }
     public static void MoveObject(Transform obj,Vector3 movePosition,float duration,Ease animationType)
     {

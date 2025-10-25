@@ -21,7 +21,8 @@ public class Island : MonoBehaviour
     private void FenceTask()
     {
         _fences.gameObject.layer = 0;
-        Destroy(BoatPort.gameObject);
+        BoatPort.SetTransfer(false);
+        Destroy(BoatPort.gameObject,.15f);
     }
 
     private void BridgeTask()

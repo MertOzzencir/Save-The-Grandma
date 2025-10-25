@@ -129,9 +129,9 @@ public class Bench : MonoBehaviour
             _refCollectables[i] =nextCraftable.SOData._recipes[i].Collectable;
             _materialReq[i].sprite = _refCollectables[i]._collectableData.InventoryInformation.InventoryIcon;
             _materialReq[i].color = new Color(255, 255, 255, 1);
-            _refAmount[i] = nextCraftable.SOData._recipes[0].Amount;
+            _refAmount[i] = nextCraftable.SOData._recipes[i].Amount;
             _materialAmountText[i].text = _refAmount[i].ToString();
-            _materialNameText[i].text = nextCraftable.SOData._recipes[0].Collectable._collectableData.InventoryInformation.InventoryName;
+            _materialNameText[i].text = nextCraftable.SOData._recipes[i].Collectable._collectableData.InventoryInformation.InventoryName;
         }
     }
     public void RecieveItem(InventoryType slotType, Collectable fixedCollectable, out bool materialDecrease)

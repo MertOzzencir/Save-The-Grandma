@@ -7,7 +7,9 @@ public class Collectable : MonoBehaviour
 {
     public CollectableSO _collectableData;
     public ToolType ToolType { get; set; }
-    public bool Collected;
+    public bool Collected { get; set; }
+    public bool Spotted{ get; set; }
+    
 
     private EntityAudioManager _audioManager;
     private bool _canTurn;

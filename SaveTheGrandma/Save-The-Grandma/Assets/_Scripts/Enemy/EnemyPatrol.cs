@@ -34,12 +34,14 @@ public class EnemyPatrol : EnemyState
         _collectables = Physics.OverlapSphere(Enemy.transform.position, _checkRadius, _collectableMask);
         foreach (var a in _collectables)
         {
-            Vector3 _tempMovePos = (a.transform.position - Enemy.transform.position).normalized;
+            Collectable currentCollectable = a.GetComponent<Collectable>();
+            Vector3 _tempMovePos = (currentCollectable.transform.position - Enemy.transform.position).normalized;
             float isItInArea = Vector3.Dot(_tempMovePos, Enemy.transform.forward);
-            if (isItInArea > 0.5f)
+            if (isItInArea > 0.5f && !currentCollectable.Spotted)
             {
-                Enemy.CurrentEatTarget = a.GetComponent<Collectable>();
-                _movePosition = a.transform.position;
+                currentCollectable.Spotted = true;
+                Enemy.CurrentEatTarget = currentCollectable;
+                _movePosition = currentCollectable.transform.position;
                 _pathfinder.MoveToDestination(_movePosition);
                 break;
             }
@@ -62,7 +64,7 @@ public class EnemyPatrol : EnemyState
         if (Enemy.CurrentEatTarget != null)
         {
             IndicatorManager.ImplementEatIndicator(Enemy.CurrentEatTarget.transform);
-            Enemy.MoveDistanceCheck(Enemy.transform,Enemy.CurrentEatTarget.transform.position, Enemy.EnemyEat, 4f);
+            Enemy.MoveDistanceCheck(Enemy.transform,Enemy.CurrentEatTarget.transform.position, Enemy.EnemyEat, 6f);
             _timer = 0;
         }
 
