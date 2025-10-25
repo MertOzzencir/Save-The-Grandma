@@ -6,6 +6,7 @@ public class Grandma : MonoBehaviour
     private Rigidbody _rb;
     private bool _canMove;
     private EntityPathFinding _pathFindging;
+
     void Start()
     {
         _pathFindging = GetComponent<EntityPathFinding>();

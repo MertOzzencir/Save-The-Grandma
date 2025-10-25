@@ -3,12 +3,16 @@ using UnityEngine;
 public class IslandBoatPort : MonoBehaviour
 {
 
+    public static int PortIndexTimer;
+    public int PortID{ get; set; }
     [SerializeField] private Transform _enemySpawnPositionOnIsland;
     [SerializeField] private Animator _anim;
 
     private bool _canTransfer;
     void Awake()
     {
+        PortIndexTimer++;
+        PortID = PortIndexTimer;
         _anim = GetComponentInChildren<Animator>();
         _canTransfer = true;
     }

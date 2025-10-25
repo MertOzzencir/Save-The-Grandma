@@ -12,10 +12,15 @@ public class Island : MonoBehaviour
     [SerializeField] private GameObject _nextIslandCloud;
     [SerializeField] private Vector3 _nextIslandMovePosition;
 
-    void Awake()
+    public virtual void Awake()
     {
         _bridge.OnComplete += BridgeTask;
         _fences.OnComplete += FenceTask;
+        Invoke(nameof(SetCloud), 2f);
+    }
+    private void SetCloud()
+    {
+        _nextIslandCloud.SetActive(true);
     }
 
     private void FenceTask()
@@ -27,14 +32,15 @@ public class Island : MonoBehaviour
 
     private void BridgeTask()
     {
+        TweenManager.ScaleObject(_nextIslandCloud.transform, Vector3.zero, 1f, DG.Tweening.Ease.Linear);
         _bridge.gameObject.layer = 9;
+        _nextIsland.SetActive(true);
         Vector3 localScaleBridge = _nextIsland.transform.localScale;
         PathColliderManager.UpdatePathMeshCollider(_nextIsland.GetComponent<Collider>());
         _nextIsland.transform.localScale = Vector3.zero;
         _nextIsland.SetActive(true);
-        TweenManager.ScaleObject(_nextIsland.transform,localScaleBridge, 1f,DG.Tweening.Ease.InBounce);
-        TweenManager.ScaleObject(_nextIslandCloud.transform, Vector3.zero, 1f, DG.Tweening.Ease.InBounce);
-        TweenManager.MoveObject(_nextIsland.transform, _nextIslandMovePosition, 1f, DG.Tweening.Ease.InElastic);
+        TweenManager.ScaleObject(_nextIsland.transform,localScaleBridge, 2f,DG.Tweening.Ease.InBack);
+        TweenManager.MoveObject(_nextIsland.transform, _nextIslandMovePosition, 1f, DG.Tweening.Ease.InBack);
         Destroy(_nextIslandCloud, 1.1f);
     }
 }

@@ -1,12 +1,11 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EntityHealth : MonoBehaviour
 {
     [SerializeField] private int _health;
     [SerializeField] private Material _damagedMaterial;
+    [SerializeField] private GameObject _endScreen;
 
     private Material _originalMaterial;
     private MeshRenderer _visualRenderer;
@@ -27,7 +26,9 @@ public class EntityHealth : MonoBehaviour
 
     public void HandleDeath()
     {
+        //_endScreen.SetActive(true);
         Destroy(gameObject);
+        //Application.Quit(8);
     }
     IEnumerator DamageEffect()
     {

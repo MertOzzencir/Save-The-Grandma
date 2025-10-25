@@ -24,5 +24,5 @@ MonoBehaviour:
     Amount: 1
   - Collectable: {fileID: 6101234494317946951, guid: a77b02c25d6154547accae03400ff031,
       type: 3}
-    Amount: 3
+    Amount: 1
   Prefab: {fileID: 0}

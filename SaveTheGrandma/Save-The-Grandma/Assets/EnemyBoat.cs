@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class EnemyBoat : Spawnable
@@ -7,29 +8,33 @@ public class EnemyBoat : Spawnable
     [SerializeField] private List<Enemy> _enemyPrefab;
     [SerializeField] private Collider Water;
     private EntityPathFinding _pathFinder;
-    private IslandBoatPort _currentPortToTransfer;
+    private List<IslandBoatPort> _currentPortToTransfer;
+    private IslandBoatPort _pickedPort;
     private bool _canTransport;
     private bool _canChooseRandomPosition;
     private void Awake()
     {
         _pathFinder = GetComponent<EntityPathFinding>();
         _canTransport = true;
+        _currentPortToTransfer = new List<IslandBoatPort>();
     }
 
     void Start()
     {
         Water = GameObject.FindGameObjectWithTag("Water").GetComponent<Collider>();
         _canChooseRandomPosition = true;
-        FindPort();
-    }
+        FindPorts();
+        _pathFinder.ChooseMovePosition(Water);
 
+    }
     void Update()
     {
-        if (_currentPortToTransfer != null)
+       
+        if (_pickedPort != null)
         {
             if (_canTransport)
             {
-                if (Vector3.Distance(transform.position, _currentPortToTransfer.transform.position) < 20f)
+                if (Vector3.Distance(transform.position, _pickedPort.transform.position) < 20f)
                 {
                     StartCoroutine(SpawnEnemyOnIsland());
                 }
@@ -41,16 +46,24 @@ public class EnemyBoat : Spawnable
         }
         else
         {
-            FindPort();
-            if (_canChooseRandomPosition && _canTransport)
+            FindPorts();
+            Vector3 movePosition = SpawnOwner.transform.position;
+            if (_canChooseRandomPosition && !_canTransport)
             {
-                _pathFinder.ChooseMovePosition(Water);
-                _pathFinder.MoveToDestination(_pathFinder.GetChoosedPosition());
+                movePosition = SpawnOwner.transform.position;
+                _pathFinder.MoveToDestination(movePosition);
+                ResetBoat();
+            }
+
+            else if (_canChooseRandomPosition && _canTransport)
+            {
+                movePosition = _pathFinder.GetChoosedPosition();
+                _pathFinder.MoveToDestination(movePosition);
                 _canChooseRandomPosition = false;
             }
             else
             {
-                if (Vector3.Distance(transform.position, _pathFinder.GetChoosedPosition()) < 20f)
+                if (Vector3.Distance(transform.position,movePosition) < 20f)
                 {
                     _canChooseRandomPosition = true;
                 }
@@ -67,13 +80,25 @@ public class EnemyBoat : Spawnable
             Destroy(gameObject);
         }
     }
-    private void FindPort()
+    private void FindPorts()
     {
-        _currentPortToTransfer = PathColliderManager.PathSurface.GetComponent<Island>().BoatPort;
-        if (_currentPortToTransfer != null)
+        _currentPortToTransfer.Clear();
+        IslandBoatPort[] tempArray = FindObjectsByType<IslandBoatPort>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        if (tempArray.Length < 1)
+            return;
+        _currentPortToTransfer = tempArray.ToList();
+        _pickedPort = _currentPortToTransfer[0];
+        foreach (var a in _currentPortToTransfer)
         {
-            _pathFinder.MoveToDestination(_currentPortToTransfer.transform.position);
+            if (a.PortID < _pickedPort.PortID)
+            {
+                _pickedPort = a;
+            }
         }
+        
+
+        _pathFinder.MoveToDestination(_pickedPort.transform.position);
+        
     }
 
     IEnumerator SpawnEnemyOnIsland()
@@ -85,9 +110,9 @@ public class EnemyBoat : Spawnable
         {
             if (_currentPortToTransfer != null)
             {
-                _currentPortToTransfer.CarryEnemyAnimation();
+                _pickedPort.CarryEnemyAnimation();
                 yield return new WaitForSeconds(1f);
-                _currentPortToTransfer.CarryEnemyToIsland(a);
+                _pickedPort.CarryEnemyToIsland(a);
             }
         }
         _pathFinder.Agent.enabled = true;
