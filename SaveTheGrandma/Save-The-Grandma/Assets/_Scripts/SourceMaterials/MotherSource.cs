@@ -24,7 +24,7 @@ public class MotherSource : Spawnable
         _totalChild = transform.childCount;
         GetChildrenInfo(_childMaterials);
         Vector3 localScale = transform.localScale;
-        transform.localScale = Vector3.zero;//new Vector3(0.1f,0.1f,0.1f);
+        transform.localScale = new Vector3(0.1f,0.1f,0.1f);
         TweenManager.ScaleObject(transform, localScale, animationDuration, DG.Tweening.Ease.OutBack);
     }
 

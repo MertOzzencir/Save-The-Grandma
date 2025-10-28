@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 
 public class EnemyBoat : Spawnable
@@ -24,17 +25,17 @@ public class EnemyBoat : Spawnable
         Water = GameObject.FindGameObjectWithTag("Water").GetComponent<Collider>();
         _canChooseRandomPosition = true;
         FindPorts();
-        _pathFinder.ChooseMovePosition(Water);
+        _pathFinder.ChooseMovePositionByEnemyBoat(Water);
 
     }
+     
     void Update()
     {
-       
         if (_pickedPort != null)
         {
             if (_canTransport)
             {
-                if (Vector3.Distance(transform.position, _pickedPort.transform.position) < 20f)
+                if (Vector3.Distance(transform.position, _pickedPort.transform.position) < 25f)
                 {
                     StartCoroutine(SpawnEnemyOnIsland());
                 }
@@ -47,23 +48,21 @@ public class EnemyBoat : Spawnable
         else
         {
             FindPorts();
-            Vector3 movePosition = SpawnOwner.transform.position;
-            if (_canChooseRandomPosition && !_canTransport)
+            if (!_canTransport)
             {
-                movePosition = SpawnOwner.transform.position;
-                _pathFinder.MoveToDestination(movePosition);
                 ResetBoat();
             }
 
             else if (_canChooseRandomPosition && _canTransport)
             {
-                movePosition = _pathFinder.GetChoosedPosition();
-                _pathFinder.MoveToDestination(movePosition);
+                Debug.Log("Abi?");
+                _pathFinder.ChooseMovePositionByEnemyBoat(Water);
+                _pathFinder.MoveToDestination( _pathFinder.GetChoosedPosition());
                 _canChooseRandomPosition = false;
             }
             else
             {
-                if (Vector3.Distance(transform.position,movePosition) < 20f)
+                if (Vector3.Distance(transform.position,_pathFinder.GetChoosedPosition()) < 20f)
                 {
                     _canChooseRandomPosition = true;
                 }
@@ -74,6 +73,7 @@ public class EnemyBoat : Spawnable
 
     private void ResetBoat()
     {
+        _pathFinder.MoveToDestination(SpawnOwner.transform.position);
         if (Vector3.Distance(transform.position, SpawnOwner.transform.position) < 5f)
         {
             ResetSpawner();
@@ -82,6 +82,8 @@ public class EnemyBoat : Spawnable
     }
     private void FindPorts()
     {
+        if (!_canTransport)
+            return;
         _currentPortToTransfer.Clear();
         IslandBoatPort[] tempArray = FindObjectsByType<IslandBoatPort>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
         if (tempArray.Length < 1)
@@ -95,10 +97,12 @@ public class EnemyBoat : Spawnable
                 _pickedPort = a;
             }
         }
-        
-
-        _pathFinder.MoveToDestination(_pickedPort.transform.position);
-        
+        _pathFinder.Agent.ResetPath();
+        Invoke(nameof(MoveToPort), 3f);
+    }
+    private void MoveToPort()
+    {
+        _pathFinder.MoveToDestination(new Vector3(_pickedPort.transform.position.x,transform.position.y,_pickedPort.transform.position.z));
     }
 
     IEnumerator SpawnEnemyOnIsland()

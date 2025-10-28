@@ -52,7 +52,7 @@ Material:
     - _Noise_Speed: 57.8
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _Transparency_Range: 374.38
+    - _Transparency_Range: 25
     m_Colors:
     - _Color_Bottom: {r: 0.27620032, g: 0.32353815, b: 0.374663, a: 1}
     - _Color_Peak: {r: 0.5383388, g: 0.6391785, b: 0.74663067, a: 1}

@@ -8,9 +8,8 @@ public class Island : MonoBehaviour
     [SerializeField] private Builder _fences;
     public IslandBoatPort BoatPort;
     [Header("Next Island")]
-    [SerializeField] private GameObject _nextIsland;
+    [SerializeField] private Island _nextIsland;
     [SerializeField] private GameObject _nextIslandCloud;
-    [SerializeField] private Vector3 _nextIslandMovePosition;
 
     public virtual void Awake()
     {
@@ -32,15 +31,13 @@ public class Island : MonoBehaviour
 
     private void BridgeTask()
     {
-        TweenManager.ScaleObject(_nextIslandCloud.transform, Vector3.zero, 1f, DG.Tweening.Ease.Linear);
-        _bridge.gameObject.layer = 9;
-        _nextIsland.SetActive(true);
         Vector3 localScaleBridge = _nextIsland.transform.localScale;
+        TweenManager.ScaleObject(_nextIslandCloud.transform, localScaleBridge/2, 1f, DG.Tweening.Ease.Linear);
+        _bridge.gameObject.layer = 9;
+        _nextIsland.BoatPort.gameObject.SetActive(true);
         PathColliderManager.UpdatePathMeshCollider(_nextIsland.GetComponent<Collider>());
         _nextIsland.transform.localScale = Vector3.zero;
-        _nextIsland.SetActive(true);
         TweenManager.ScaleObject(_nextIsland.transform,localScaleBridge, 2f,DG.Tweening.Ease.InBack);
-        TweenManager.MoveObject(_nextIsland.transform, _nextIslandMovePosition, 1f, DG.Tweening.Ease.InBack);
         Destroy(_nextIslandCloud, 1.1f);
     }
 }
